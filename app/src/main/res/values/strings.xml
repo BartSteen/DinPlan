@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">DinPlan</string>
+    <string name="title_activity_second">activity_second</string>
+    <string name="title_activity_meal_list">activity_meal_list</string>
+</resources>
