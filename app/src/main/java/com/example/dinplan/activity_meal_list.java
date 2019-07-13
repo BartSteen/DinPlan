@@ -17,13 +17,17 @@ import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class activity_meal_list extends AppCompatActivity {
 
     private ArrayList<Meal> mealArrayList = new ArrayList<>();
     final String fileName = "MealList.txt";
+    final String fileNamePlan = "MealPlan.txt"; //ADD SAVE AND LOAD FOR THIS SEPERATE
     public String dateString;
+    HashMap<String, Meal> plannedDaysMap = new HashMap<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,13 +37,12 @@ public class activity_meal_list extends AppCompatActivity {
         loadMealList();
         //get meal just added
         if (getIntent().getExtras() != null) {
-            //load the list
 
             //check if this is a replacement
             if (getIntent().getExtras().containsKey("oldName")) {
                 removeMealFromList((String) getIntent().getExtras().get("oldName"));
             }
-            //check if this is adding an ingredient (rather than delete)
+            //check if this is adding an meal (rather than delete)
             if (getIntent().getExtras().containsKey("Meal")) {
                 Meal newMeal = (Meal) getIntent().getSerializableExtra("Meal");
                 addMealToList(newMeal);
@@ -82,9 +85,13 @@ public class activity_meal_list extends AppCompatActivity {
 
     private void initRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.recycler_meal_list);
-        RecyclerViewAdapterMeal adapter = new RecyclerViewAdapterMeal(mealArrayList,this, dateString);
+        RecyclerViewAdapterMeal adapter = new RecyclerViewAdapterMeal(mealArrayList,this, dateString, activity_meal_list.this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    public void addPlan(String datePlanned, Meal mealPlanned) {
+        plannedDaysMap.put(datePlanned, mealPlanned);
     }
 
 

@@ -43,6 +43,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //button for going to the calendar
+        Button btnCalendar = findViewById(R.id.btn_calendar);
+        btnCalendar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(getBaseContext(), activity_calendar.class);
+                startActivity(myIntent);
+            }
+        });
+
 
         //add date stuff
 
@@ -50,19 +60,8 @@ public class MainActivity extends AppCompatActivity {
          monthNumber = Calendar.getInstance().get(Calendar.MONTH);
          yearNumber = Calendar.getInstance().get(Calendar.YEAR);
 
-        TextView dateTxt = findViewById(R.id.txt_date);
-        dateTxt.setText(String.format("%d-%d-%d", dayOfMonth, monthNumber + 1, yearNumber));
-
-        //button for planning a meal for today
-        Button btnPlanMeal = findViewById(R.id.btn_plan_meal);
-        btnPlanMeal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent myIntent = new Intent(getBaseContext(), activity_meal_list.class);
-                myIntent.putExtra("date", String.format("%d-%d-%d", dayOfMonth, monthNumber + 1, yearNumber) );
-                startActivityForResult(myIntent, 1);
-            }
-        });
+       // TextView dateTxt = findViewById(R.id.txt_date);
+       // dateTxt.setText(String.format("%d-%d-%d", dayOfMonth, monthNumber + 1, yearNumber));
 
 
 
@@ -75,24 +74,5 @@ public class MainActivity extends AppCompatActivity {
         //Just do nothing for now
     }
 
-    //triggers when an ingredient is added
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        if (requestCode == 1) {
-            //if successful
-            if(resultCode == Activity.RESULT_OK){
-                //check if this is a replacement
-                if (data.getExtras().containsKey("Meal")) {
-                    Meal plannedMeal = (Meal) data.getExtras().get("Meal");
-                    TextView dateTxt = findViewById(R.id.txt_date);
-                    dateTxt.setText(String.format("%d-%d-%d", dayOfMonth, monthNumber + 1, yearNumber) + " : " + plannedMeal.getName());
-                }
-            }
-            if (resultCode == Activity.RESULT_CANCELED) {
-                //Write your code if there's no result
-            }
-        }
-    }
 
 }

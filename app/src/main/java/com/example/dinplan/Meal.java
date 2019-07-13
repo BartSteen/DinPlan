@@ -9,6 +9,7 @@ public class Meal implements Serializable {
     private ArrayList<Ingredient> ingredients = new ArrayList<>();
     private String recipe;
 
+
     public Meal() {
         //place
     }
@@ -34,6 +35,7 @@ public class Meal implements Serializable {
     public void setIngredients(ArrayList<Ingredient> ingredients) {
         this.ingredients = ingredients;
     }
+
 
     public String getRecipe() {
         return recipe;

@@ -21,12 +21,14 @@ public class RecyclerViewAdapterMeal extends RecyclerView.Adapter<RecyclerViewAd
     private ArrayList<Meal> mealArrayList = new ArrayList<>();
     private Context mContext;
     private String dateString;
+    private activity_meal_list parAct;
 
     //constructor
-    public RecyclerViewAdapterMeal(ArrayList<Meal> mealArrayList, Context mContext, String dateString) {
+    public RecyclerViewAdapterMeal(ArrayList<Meal> mealArrayList, Context mContext, String dateString, activity_meal_list parAct) {
         this.mealArrayList = mealArrayList;
         this.mContext = mContext;
         this.dateString = dateString;
+        this.parAct = parAct;
     }
 
     //idk
@@ -59,6 +61,8 @@ public class RecyclerViewAdapterMeal extends RecyclerView.Adapter<RecyclerViewAd
                     mContext.startActivity(myIntent);
                 } else {
                     //go back with the planned meal
+                    parAct.addPlan(dateString, currentMeal);
+
                     Intent returnIntent = new Intent();
                     returnIntent.putExtra("Meal", currentMeal);
                     ((Activity) mContext).setResult(Activity.RESULT_OK, returnIntent);
