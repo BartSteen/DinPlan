@@ -43,15 +43,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //button for going to the calendar
-        Button btnCalendar = findViewById(R.id.btn_calendar);
-        btnCalendar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent myIntent = new Intent(getBaseContext(), activity_calendar.class);
-                startActivity(myIntent);
-            }
-        });
 
 
         //add date stuff

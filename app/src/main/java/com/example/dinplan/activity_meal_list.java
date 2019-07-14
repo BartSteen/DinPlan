@@ -8,6 +8,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.io.BufferedReader;
@@ -24,7 +26,7 @@ public class activity_meal_list extends AppCompatActivity {
 
     private ArrayList<Meal> mealArrayList = new ArrayList<>();
     final String fileName = "MealList.txt";
-    final String fileNamePlan = "MealPlan.txt"; //ADD SAVE AND LOAD FOR THIS SEPERATE
+    final String fileNamePlan = "MealPlan.txt";
     public String dateString;
     HashMap<String, Meal> plannedDaysMap = new HashMap<>();
 
@@ -35,6 +37,7 @@ public class activity_meal_list extends AppCompatActivity {
         setContentView(R.layout.activity_meal_list);
 
         loadMealList();
+        loadPlan();
         //get meal just added
         if (getIntent().getExtras() != null) {
 
@@ -53,13 +56,24 @@ public class activity_meal_list extends AppCompatActivity {
                 dateString = (String) getIntent().getExtras().get("date");
 
                 TextView topText = findViewById(R.id.txt_meal_list);
-                topText.setText("Choose meal to plan");
+                topText.setText("Plan for: " + dateString);
             }
 
             saveMealList();
         }
 
         initRecyclerView();
+
+        //button for going to the calendar
+        Button btnCalendar = findViewById(R.id.btn_calendar);
+        btnCalendar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(getBaseContext(), activity_calendar.class);
+                myIntent.putExtra("planMap", plannedDaysMap);
+                startActivity(myIntent);
+            }
+        });
     }
 
     //add a meal to the list for the view or replace if it already exists
@@ -92,6 +106,20 @@ public class activity_meal_list extends AppCompatActivity {
 
     public void addPlan(String datePlanned, Meal mealPlanned) {
         plannedDaysMap.put(datePlanned, mealPlanned);
+    }
+
+    public HashMap<String, Meal> getPlannedDaysMap() {
+        return plannedDaysMap;
+    }
+
+    //find the meal based on name and returns it, if it doesn't exist return null
+    public Meal findMeal(String id) {
+        for (Meal curMeal : mealArrayList) {
+            if (id.equals(curMeal.getName())) {
+                return curMeal;
+            }
+        }
+        return null;
     }
 
 
@@ -158,6 +186,58 @@ public class activity_meal_list extends AppCompatActivity {
                 //add the meal to the list
                 mealArrayList.add(new Meal(mealName, ingList, ""));
             }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    //Saves the planned meals data
+    public void savePlan() {
+        String fileContent = "";
+        FileOutputStream outputStream;
+
+        //add all planned meals to fileContent each plan on a separate line
+        for (String dateS : plannedDaysMap.keySet()) {
+            fileContent += dateS + ";" + plannedDaysMap.get(dateS).getName() + "\n";
+        }
+
+        //write the fileContent to a file in internal storage
+        try {
+            outputStream = openFileOutput(fileNamePlan, Context.MODE_PRIVATE);
+            outputStream.write(fileContent.getBytes());
+            outputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    //reads a file from internal storage and loads it into arraylist
+    public void loadPlan() {
+        try {
+            //Read the file and load it into a string
+            FileInputStream inputStream = openFileInput(fileNamePlan);
+            InputStreamReader streamReader = new InputStreamReader(inputStream);
+            BufferedReader bufferedReader = new BufferedReader(streamReader);
+            StringBuilder stringBuilder = new StringBuilder();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                stringBuilder.append(line + "\n");
+            }
+            String fullString = stringBuilder.toString();
+
+            plannedDaysMap.clear();
+            Scanner scn = new Scanner(fullString);
+            while (scn.hasNext()) {
+                String planLine = scn.nextLine();
+                String[] planComp = planLine.split(";");
+                if (findMeal(planComp[1]) != null) {
+                    addPlan(planComp[0], findMeal(planComp[1]));
+                } else {
+                    System.out.println("IT IS NULL");
+                }
+            }
+
 
         } catch (Exception e) {
             e.printStackTrace();

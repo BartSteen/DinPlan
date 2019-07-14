@@ -62,9 +62,10 @@ public class RecyclerViewAdapterMeal extends RecyclerView.Adapter<RecyclerViewAd
                 } else {
                     //go back with the planned meal
                     parAct.addPlan(dateString, currentMeal);
+                    parAct.savePlan();
 
                     Intent returnIntent = new Intent();
-                    returnIntent.putExtra("Meal", currentMeal);
+                    returnIntent.putExtra("planMap", parAct.getPlannedDaysMap());
                     ((Activity) mContext).setResult(Activity.RESULT_OK, returnIntent);
                     ((Activity) mContext).finish();
                 }

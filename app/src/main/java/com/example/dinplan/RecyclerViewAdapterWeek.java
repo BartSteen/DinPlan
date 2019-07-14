@@ -13,16 +13,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class RecyclerViewAdapterWeek extends RecyclerView.Adapter<RecyclerViewAdapterWeek.ViewHolder>{
 
     //variables
-    private Integer dayOfWeek;
+    private HashMap<String, Meal> planMap;
     private Context mContext;
 
     //constructor
-    public RecyclerViewAdapterWeek(Integer dayOfWeek, Context mContext) {
-        this.dayOfWeek = dayOfWeek;
+    public RecyclerViewAdapterWeek(HashMap<String, Meal> planMap, Context mContext) {
+        this.planMap = planMap;
         this.mContext = mContext;
     }
 
@@ -38,8 +39,9 @@ public class RecyclerViewAdapterWeek extends RecyclerView.Adapter<RecyclerViewAd
     //when something new is added?
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.dayWeek.setText(position);
-        holder.nameMeal.setText("");
+        String dateString = (String) planMap.keySet().toArray()[position];
+        holder.dayDate.setText(dateString);
+        holder.nameMeal.setText(planMap.get(dateString).getName());
 
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,21 +57,21 @@ public class RecyclerViewAdapterWeek extends RecyclerView.Adapter<RecyclerViewAd
     //returns the amount of items
     @Override
     public int getItemCount() {
-        return 7;
+        return planMap.size();
     }
 
     //who even knows
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView nameMeal;
-        TextView dayWeek;
+        TextView dayDate;
         RelativeLayout parentLayout;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             nameMeal = itemView.findViewById(R.id.txt_meal_name_week);
-            dayWeek = itemView.findViewById(R.id.txt_day_of_week);
+            dayDate = itemView.findViewById(R.id.txt_day_of_week);
             parentLayout = itemView.findViewById(R.id.parent_layout_week);
         }
     }
