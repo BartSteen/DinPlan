@@ -3,6 +3,7 @@ package com.example.dinplan;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,17 +19,15 @@ import java.util.ArrayList;
 public class RecyclerViewAdapterMeal extends RecyclerView.Adapter<RecyclerViewAdapterMeal.ViewHolder>{
 
     //variables
-    private ArrayList<Meal> mealArrayList = new ArrayList<>();
     private Context mContext;
     private String dateString;
-    private activity_meal_list parAct;
+    private DataController dataCont;
 
     //constructor
-    public RecyclerViewAdapterMeal(ArrayList<Meal> mealArrayList, Context mContext, String dateString, activity_meal_list parAct) {
-        this.mealArrayList = mealArrayList;
+    public RecyclerViewAdapterMeal(Context mContext, String dateString, DataController dataCont) {
         this.mContext = mContext;
         this.dateString = dateString;
-        this.parAct = parAct;
+        this.dataCont = dataCont;
     }
 
     //idk
@@ -43,7 +42,7 @@ public class RecyclerViewAdapterMeal extends RecyclerView.Adapter<RecyclerViewAd
     //when something new is added?
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        final Meal currentMeal = mealArrayList.get(position);
+        final Meal currentMeal = dataCont.getMealArrayList().get(position);
         holder.name.setText(currentMeal.getName());
         holder.ingCount.setText(Integer.toString(currentMeal.getIngredients().size()));
 
@@ -61,11 +60,10 @@ public class RecyclerViewAdapterMeal extends RecyclerView.Adapter<RecyclerViewAd
                     mContext.startActivity(myIntent);
                 } else {
                     //go back with the planned meal
-                    parAct.addPlan(dateString, currentMeal);
-                    parAct.savePlan();
+                    dataCont.addPlan(dateString, currentMeal);
+                    dataCont.savePlan();
 
                     Intent returnIntent = new Intent();
-                    returnIntent.putExtra("planMap", parAct.getPlannedDaysMap());
                     ((Activity) mContext).setResult(Activity.RESULT_OK, returnIntent);
                     ((Activity) mContext).finish();
                 }
@@ -76,7 +74,7 @@ public class RecyclerViewAdapterMeal extends RecyclerView.Adapter<RecyclerViewAd
     //returns the amount of items
     @Override
     public int getItemCount() {
-        return mealArrayList.size();
+        return dataCont.getMealArrayList().size();
     }
 
     //who even knows

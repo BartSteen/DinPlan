@@ -27,8 +27,6 @@ public class activity_add_meal extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_meal);
 
-        initRecyclerView();
-
         final EditText mealNameEtxt = findViewById(R.id.etxt_mealName);
         Button btnDelMeal = findViewById(R.id.btn_del_meal);
         TextView upperTxt = findViewById(R.id.txt_meal_main);
@@ -39,7 +37,7 @@ public class activity_add_meal extends AppCompatActivity {
             currentMeal = (Meal) getIntent().getExtras().get("Meal");
             mealNameEtxt.setText(currentMeal.getName());
             ingredientsList = currentMeal.getIngredients();
-            initRecyclerView();
+
             oldName = currentMeal.getName();
 
             upperTxt.setText("Edit Meal");
@@ -58,6 +56,8 @@ public class activity_add_meal extends AppCompatActivity {
             currentMeal = new Meal();
             btnDelMeal.setVisibility(View.GONE);
         }
+
+        initRecyclerView();
 
         //button event for adding ingredient
         Button btnIngredient = findViewById(R.id.btn_addIngredient);
@@ -142,7 +142,8 @@ public class activity_add_meal extends AppCompatActivity {
                     addIngToList(newIngredient);
                 }
 
-                initRecyclerView();
+                RecyclerView recyclerView = findViewById(R.id.ingredientView);
+                recyclerView.getAdapter().notifyDataSetChanged();
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 //Write your code if there's no result

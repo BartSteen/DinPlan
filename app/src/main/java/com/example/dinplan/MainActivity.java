@@ -2,12 +2,10 @@ package com.example.dinplan;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import java.util.Calendar;
 
@@ -43,7 +41,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+        //button for going to the calendar
+        Button btnCalendar = findViewById(R.id.btn_calendar);
+        btnCalendar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(getBaseContext(), activity_calendar.class);
+                startActivity(myIntent);
+            }
+        });
 
         //add date stuff
 
@@ -53,8 +59,6 @@ public class MainActivity extends AppCompatActivity {
 
        // TextView dateTxt = findViewById(R.id.txt_date);
        // dateTxt.setText(String.format("%d-%d-%d", dayOfMonth, monthNumber + 1, yearNumber));
-
-
 
     }
 

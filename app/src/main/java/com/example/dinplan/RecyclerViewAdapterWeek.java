@@ -1,6 +1,5 @@
 package com.example.dinplan;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -8,22 +7,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class RecyclerViewAdapterWeek extends RecyclerView.Adapter<RecyclerViewAdapterWeek.ViewHolder>{
 
     //variables
-    private HashMap<String, Meal> planMap;
+    DataController dataCont;
     private Context mContext;
 
     //constructor
-    public RecyclerViewAdapterWeek(HashMap<String, Meal> planMap, Context mContext) {
-        this.planMap = planMap;
+    public RecyclerViewAdapterWeek(DataController dataCont, Context mContext) {
+        this.dataCont =  dataCont;
         this.mContext = mContext;
     }
 
@@ -39,17 +37,28 @@ public class RecyclerViewAdapterWeek extends RecyclerView.Adapter<RecyclerViewAd
     //when something new is added?
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        String dateString = (String) planMap.keySet().toArray()[position];
+        final String dateString = (String) dataCont.getPlannedDaysMap().keySet().toArray()[position];
         holder.dayDate.setText(dateString);
-        holder.nameMeal.setText(planMap.get(dateString).getName());
+        holder.nameMeal.setText(dataCont.getPlannedDaysMap().get(dateString).getName());
 
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //show ingredient screen
-            //    Intent myIntent = new Intent(mContext, activity_add_ingredient.class);;
-             //   myIntent.putExtra("Ingredient", currentIng);
-             //   ((Activity) mContext).startActivityForResult(myIntent, 1);
+                //show meal screen
+                Intent myIntent = new Intent(mContext, activity_add_meal.class);
+                myIntent.putExtra("Meal", dataCont.getPlannedDaysMap().get(dateString));
+                mContext.startActivity(myIntent);
+            }
+        });
+
+        holder.parentLayout.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                Toast.makeText(mContext, "Removed " + dateString, Toast.LENGTH_SHORT).show();
+                dataCont.removePlan(dateString);
+                dataCont.savePlan();
+                notifyDataSetChanged();
+                return true;
             }
         });
     }
@@ -57,7 +66,7 @@ public class RecyclerViewAdapterWeek extends RecyclerView.Adapter<RecyclerViewAd
     //returns the amount of items
     @Override
     public int getItemCount() {
-        return planMap.size();
+        return dataCont.getPlannedDaysMap().size();
     }
 
     //who even knows
