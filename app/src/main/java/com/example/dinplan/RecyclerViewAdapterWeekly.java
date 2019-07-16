@@ -1,5 +1,6 @@
 package com.example.dinplan;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -12,17 +13,25 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.Calendar;
+import java.util.Date;
 
-public class RecyclerViewAdapterWeek extends RecyclerView.Adapter<RecyclerViewAdapterWeek.ViewHolder>{
+
+public class RecyclerViewAdapterWeekly extends RecyclerView.Adapter<RecyclerViewAdapterWeekly.ViewHolder>{
 
     //variables
     DataController dataCont;
     private Context mContext;
+    Calendar curCal;
 
     //constructor
-    public RecyclerViewAdapterWeek(DataController dataCont, Context mContext) {
+    public RecyclerViewAdapterWeekly(DataController dataCont, Context mContext, Calendar cal) {
         this.dataCont =  dataCont;
         this.mContext = mContext;
+        this.curCal = (Calendar) cal.clone();
+
+        //set calendar to start of week
+        curCal.add(Calendar.DATE, - curCal.get(Calendar.DAY_OF_WEEK));
     }
 
     //idk
@@ -37,36 +46,46 @@ public class RecyclerViewAdapterWeek extends RecyclerView.Adapter<RecyclerViewAd
     //when something new is added?
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        final MealPlan curMP = dataCont.getPlannedDaysList().get(position);
-        holder.dayDate.setText(curMP.getDateString());
-        holder.nameMeal.setText(curMP.getPlannedMeal().getName());
+        //get date of position
+
+        Calendar tempCal = (Calendar) curCal.clone();
+        tempCal.add(Calendar.DATE, position);
+
+        final String dateString = String.format("%d-%d-%d", tempCal.get(Calendar.DAY_OF_MONTH), tempCal.get(Calendar.MONTH) + 1, tempCal.get(Calendar.YEAR));
+        holder.dayDate.setText(dateString);
+        if (dataCont.findPlan(dateString) != null) {
+            holder.nameMeal.setText(dataCont.findPlan(dateString).getPlannedMeal().getName());
+        } else {
+            holder.nameMeal.setText("Null");
+        }
 
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //show meal screen
-                Intent myIntent = new Intent(mContext, activity_add_meal.class);
-                myIntent.putExtra("Meal", curMP.getPlannedMeal());
-                mContext.startActivity(myIntent);
+                Intent myIntent = new Intent(mContext, activity_meal_list.class);
+                myIntent.putExtra("date", dateString);
+                ((Activity) mContext).startActivityForResult(myIntent, 1);
             }
         });
 
         holder.parentLayout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                Toast.makeText(mContext, "Removed " + curMP.getDateString(), Toast.LENGTH_SHORT).show();
-                dataCont.removePlan(curMP.getDateString());
-                dataCont.savePlan();
-                notifyDataSetChanged();
+           //     Toast.makeText(mContext, "Removed " + curMP.getDateString(), Toast.LENGTH_SHORT).show();
+             //   dataCont.removePlan(curMP.getDateString());
+               // dataCont.savePlan();
+                //notifyDataSetChanged();
                 return true;
             }
         });
+
     }
 
     //returns the amount of items
     @Override
     public int getItemCount() {
-        return dataCont.getPlannedDaysList().size();
+        return 7;
     }
 
     //who even knows

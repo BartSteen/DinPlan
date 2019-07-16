@@ -60,7 +60,7 @@ public class RecyclerViewAdapterMeal extends RecyclerView.Adapter<RecyclerViewAd
                     mContext.startActivity(myIntent);
                 } else {
                     //go back with the planned meal
-                    dataCont.addPlan(dateString, currentMeal);
+                    dataCont.addPlan(new MealPlan(dateString, currentMeal));
                     dataCont.savePlan();
 
                     Intent returnIntent = new Intent();

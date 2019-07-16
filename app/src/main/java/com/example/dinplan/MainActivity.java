@@ -51,6 +51,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //button for going to the calendar
+        Button btnWeekCal = findViewById(R.id.btn_weekly_calendar);
+        btnWeekCal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(getBaseContext(), activity_weekly_calendar.class);
+                startActivity(myIntent);
+            }
+        });
+
         //add date stuff
 
          dayOfMonth = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);

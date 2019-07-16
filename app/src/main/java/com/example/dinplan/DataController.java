@@ -16,7 +16,8 @@ public class DataController {
     private ArrayList<Meal> mealArrayList = new ArrayList<>();
     final String fileName = "MealList.txt";
     final String fileNamePlan = "MealPlan.txt";
-    HashMap<String, Meal> plannedDaysMap = new HashMap<>();
+    //HashMap<String, Meal> plannedDaysMap = new HashMap<>();
+    ArrayList<MealPlan> plannedDaysList = new ArrayList<>();
     Context curContext;
 
     public DataController(Context curContext) {
@@ -109,8 +110,8 @@ public class DataController {
         FileOutputStream outputStream;
 
         //add all planned meals to fileContent each plan on a separate line
-        for (String dateS : plannedDaysMap.keySet()) {
-            fileContent += dateS + ";" + plannedDaysMap.get(dateS).getName() + "\n";
+        for (MealPlan mp : plannedDaysList) {
+            fileContent += mp.getDateString() + ";" + mp.getPlannedMeal().getName() + "\n";
         }
 
         //write the fileContent to a file in internal storage
@@ -137,13 +138,13 @@ public class DataController {
             }
             String fullString = stringBuilder.toString();
 
-            plannedDaysMap.clear();
+            plannedDaysList.clear();
             Scanner scn = new Scanner(fullString);
             while (scn.hasNext()) {
                 String planLine = scn.nextLine();
                 String[] planComp = planLine.split(";");
                 if (findMeal(planComp[1]) != null) {
-                    addPlan(planComp[0], findMeal(planComp[1]));
+                    addPlan(new MealPlan(planComp[0], findMeal(planComp[1])));
                 } else {
                     System.out.println("IT IS NULL");
                 }
@@ -156,17 +157,31 @@ public class DataController {
     }
 
     //Adds a planned meal to the hashmap
-    public void addPlan(String datePlanned, Meal mealPlanned) {
-        plannedDaysMap.put(datePlanned, mealPlanned);
+    public void addPlan(MealPlan mp) {
+        plannedDaysList.add(mp);
     }
 
     public void removePlan(String dateString) {
-        plannedDaysMap.remove(dateString);
+        for (int i = 0; i < plannedDaysList.size(); i++) {
+            if (plannedDaysList.get(i).getDateString().equals(dateString)) {
+                plannedDaysList.remove(i);
+                return;
+            }
+        }
+    }
+
+    public MealPlan findPlan(String dateString) {
+        for (int i = 0; i < plannedDaysList.size(); i++) {
+            if (plannedDaysList.get(i).getDateString().equals(dateString)) {
+                return plannedDaysList.get(i);
+            }
+        }
+        return null;
     }
 
     //returns the hashmap
-    public HashMap<String, Meal> getPlannedDaysMap() {
-        return plannedDaysMap;
+    public ArrayList<MealPlan> getPlannedDaysList() {
+        return plannedDaysList;
     }
 
     //returns the arraylist with the meals

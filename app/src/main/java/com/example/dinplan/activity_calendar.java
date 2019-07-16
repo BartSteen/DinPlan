@@ -67,6 +67,9 @@ public class activity_calendar extends AppCompatActivity {
             //if successful
             if(resultCode == Activity.RESULT_OK){
                 //check if this is a replacement
+                dataCont.loadPlan();
+                RecyclerView recyclerView = findViewById(R.id.recycler_week_list);
+                recyclerView.getAdapter().notifyDataSetChanged();
 
             }
             if (resultCode == Activity.RESULT_CANCELED) {
