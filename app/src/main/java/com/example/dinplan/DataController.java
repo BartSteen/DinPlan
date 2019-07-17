@@ -16,7 +16,6 @@ public class DataController {
     private ArrayList<Meal> mealArrayList = new ArrayList<>();
     final String fileName = "MealList.txt";
     final String fileNamePlan = "MealPlan.txt";
-    //HashMap<String, Meal> plannedDaysMap = new HashMap<>();
     ArrayList<MealPlan> plannedDaysList = new ArrayList<>();
     Context curContext;
 
@@ -158,7 +157,11 @@ public class DataController {
 
     //Adds a planned meal to the hashmap
     public void addPlan(MealPlan mp) {
-        plannedDaysList.add(mp);
+        if (findPlan(mp.getDateString()) == null) {
+            plannedDaysList.add(mp);
+        } else {
+            findPlan(mp.getDateString()).setPlannedMeal(mp.getPlannedMeal());
+        }
     }
 
     public void removePlan(String dateString) {

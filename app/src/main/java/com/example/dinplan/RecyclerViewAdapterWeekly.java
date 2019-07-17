@@ -3,6 +3,7 @@ package com.example.dinplan;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,15 +24,22 @@ public class RecyclerViewAdapterWeekly extends RecyclerView.Adapter<RecyclerView
     DataController dataCont;
     private Context mContext;
     Calendar curCal;
+    private String todayDateString;
 
     //constructor
-    public RecyclerViewAdapterWeekly(DataController dataCont, Context mContext, Calendar cal) {
+    public RecyclerViewAdapterWeekly(DataController dataCont, Context mContext, Calendar cal, String todayDateString) {
         this.dataCont =  dataCont;
         this.mContext = mContext;
         this.curCal = (Calendar) cal.clone();
+        this.todayDateString = todayDateString;
+
 
         //set calendar to start of week
-        curCal.add(Calendar.DATE, - curCal.get(Calendar.DAY_OF_WEEK));
+        if (curCal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+            curCal.add(Calendar.DATE, -6);
+        } else {
+            curCal.add(Calendar.DATE, -(curCal.get(Calendar.DAY_OF_WEEK) - curCal.getFirstDayOfWeek()));
+        }
     }
 
     //idk
@@ -47,7 +55,6 @@ public class RecyclerViewAdapterWeekly extends RecyclerView.Adapter<RecyclerView
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         //get date of position
-
         Calendar tempCal = (Calendar) curCal.clone();
         tempCal.add(Calendar.DATE, position);
 
@@ -57,6 +64,15 @@ public class RecyclerViewAdapterWeekly extends RecyclerView.Adapter<RecyclerView
             holder.nameMeal.setText(dataCont.findPlan(dateString).getPlannedMeal().getName());
         } else {
             holder.nameMeal.setText("Null");
+        }
+
+        if (dateString.equals(todayDateString)) {
+            System.out.println("yes " + position);
+            holder.dayDate.setTextColor(Color.RED);
+            holder.nameMeal.setTextColor(Color.RED);
+        } else {
+            holder.dayDate.setTextColor(Color.BLACK);
+            holder.nameMeal.setTextColor(Color.BLACK);
         }
 
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
@@ -72,14 +88,15 @@ public class RecyclerViewAdapterWeekly extends RecyclerView.Adapter<RecyclerView
         holder.parentLayout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-           //     Toast.makeText(mContext, "Removed " + curMP.getDateString(), Toast.LENGTH_SHORT).show();
-             //   dataCont.removePlan(curMP.getDateString());
-               // dataCont.savePlan();
-                //notifyDataSetChanged();
+                if (dataCont.findPlan(dateString) != null) {
+                    Toast.makeText(mContext, "Removed " + dataCont.findPlan(dateString).getPlannedMeal().getName() +  " on " + dateString, Toast.LENGTH_SHORT).show();
+                    dataCont.removePlan(dateString);
+                    dataCont.savePlan();
+                    notifyDataSetChanged();
+                }
                 return true;
             }
         });
-
     }
 
     //returns the amount of items

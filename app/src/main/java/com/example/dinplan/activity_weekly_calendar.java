@@ -19,6 +19,7 @@ public class activity_weekly_calendar extends AppCompatActivity {
 
     Calendar curCal;
     DataController dataCont;
+    private String todayDateString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,10 +33,8 @@ public class activity_weekly_calendar extends AppCompatActivity {
         curCal = Calendar.getInstance();
         Date currentDate = new Date();
         curCal.setTime(currentDate);
-        //for (int i = 0; i <= 20; i++) {
-         //   cal.add(Calendar.DATE, 1);
-         //   System.out.println(cal.get(Calendar.DAY_OF_MONTH));
-        //}
+
+        todayDateString = String.format("%d-%d-%d", curCal.get(Calendar.DAY_OF_MONTH), curCal.get(Calendar.MONTH) + 1, curCal.get(Calendar.YEAR));
 
         final TextView headerTxt = findViewById(R.id.txt_weekly_head);
         headerTxt.setText("Week " + curCal.get(Calendar.WEEK_OF_YEAR));
@@ -68,7 +67,7 @@ public class activity_weekly_calendar extends AppCompatActivity {
 
     private void initRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.recycler_weekly);
-        RecyclerViewAdapterWeekly adapter = new RecyclerViewAdapterWeekly(dataCont,this, curCal);
+        RecyclerViewAdapterWeekly adapter = new RecyclerViewAdapterWeekly(dataCont,this, curCal, todayDateString);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -81,8 +80,7 @@ public class activity_weekly_calendar extends AppCompatActivity {
             if(resultCode == Activity.RESULT_OK){
                 //check if this is a replacement
                 dataCont.loadPlan();
-                RecyclerView recyclerView = findViewById(R.id.recycler_weekly);
-                recyclerView.getAdapter().notifyDataSetChanged();
+                initRecyclerView();
 
             }
             if (resultCode == Activity.RESULT_CANCELED) {
