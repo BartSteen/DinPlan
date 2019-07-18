@@ -67,7 +67,7 @@ public class RecyclerViewAdapterWeekly extends RecyclerView.Adapter<RecyclerView
         }
 
         if (dateString.equals(todayDateString)) {
-            System.out.println("yes " + position);
+            //make current day red
             holder.dayDate.setTextColor(Color.RED);
             holder.nameMeal.setTextColor(Color.RED);
         } else {
@@ -78,7 +78,7 @@ public class RecyclerViewAdapterWeekly extends RecyclerView.Adapter<RecyclerView
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //show meal screen
+                //show meal screen to select a meal
                 Intent myIntent = new Intent(mContext, activity_meal_list.class);
                 myIntent.putExtra("date", dateString);
                 ((Activity) mContext).startActivityForResult(myIntent, 1);
@@ -88,6 +88,7 @@ public class RecyclerViewAdapterWeekly extends RecyclerView.Adapter<RecyclerView
         holder.parentLayout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
+                //remove the plan
                 if (dataCont.findPlan(dateString) != null) {
                     Toast.makeText(mContext, "Removed " + dataCont.findPlan(dateString).getPlannedMeal().getName() +  " on " + dateString, Toast.LENGTH_SHORT).show();
                     dataCont.removePlan(dateString);

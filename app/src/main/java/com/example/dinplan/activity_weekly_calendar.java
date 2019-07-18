@@ -30,6 +30,7 @@ public class activity_weekly_calendar extends AppCompatActivity {
         dataCont.loadMealList();
         dataCont.loadPlan();
 
+        //current date setting up
         curCal = Calendar.getInstance();
         Date currentDate = new Date();
         curCal.setTime(currentDate);
@@ -69,7 +70,13 @@ public class activity_weekly_calendar extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.recycler_weekly);
         RecyclerViewAdapterWeekly adapter = new RecyclerViewAdapterWeekly(dataCont,this, curCal, todayDateString);
         recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this) {
+            //disable scrolling
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        });
     }
 
     @Override
@@ -78,7 +85,7 @@ public class activity_weekly_calendar extends AppCompatActivity {
         if (requestCode == 1) {
             //if successful
             if(resultCode == Activity.RESULT_OK){
-                //check if this is a replacement
+                //load plan on returning from selecting a meal
                 dataCont.loadPlan();
                 initRecyclerView();
 

@@ -7,11 +7,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 
 import java.util.Calendar;
-import java.util.Random;
 
 
 public class activity_calendar extends AppCompatActivity {
@@ -37,18 +34,6 @@ public class activity_calendar extends AppCompatActivity {
         dayOfWeek = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
 
         initRecyclerView();
-
-        //button for planning a meal for today
-        Button btnPlanMeal = findViewById(R.id.btn_plan_meal);
-        btnPlanMeal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent myIntent = new Intent(getBaseContext(), activity_meal_list.class);
-                Random rand = new Random();
-                myIntent.putExtra("date", String.format("%d-%d-%d", dayOfMonth + rand.nextInt(10), monthNumber + rand.nextInt(5), yearNumber + rand.nextInt(100)) );
-                startActivityForResult(myIntent, 1);
-            }
-        });
 
     }
 

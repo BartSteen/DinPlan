@@ -7,10 +7,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Scanner;
 
-//This class handles all the data storing, loading and changing
+//This class handles all the data storing, loading and altering
 public class DataController {
 
     private ArrayList<Meal> mealArrayList = new ArrayList<>();
@@ -73,20 +72,24 @@ public class DataController {
             }
             String fullString = stringBuilder.toString();
 
-            //Transform the string into an ArrayList of meals
+            //clean the arraylist
             mealArrayList.clear();
+
+            //Transform the string into an ArrayList of meals using a scanner
             Scanner scn = new Scanner(fullString);
             while (scn.hasNext()) {
-                //mealName
                 String mealName = scn.nextLine();
                 //remove all not visible characters
                 mealName.replaceAll("\\s", "");
 
-                //ingredient list
+                //temperary arraylist to store the ingredients
                 ArrayList<Ingredient> ingList = new ArrayList<>();
+                //ingredients are stored on one line separated by a | char
                 String ingredientsString = scn.nextLine();
                 String[] ingredientsSeparate = ingredientsString.split("\\|");
+
                 for (String ingString : ingredientsSeparate) {
+                    //within each ingredient the variables are separated by ;
                     String[] sepComponents = ingString.split(";");
                     String ingName = sepComponents[0];
                     Float ingAmount = Float.valueOf(sepComponents[1]);
@@ -108,7 +111,7 @@ public class DataController {
         String fileContent = "";
         FileOutputStream outputStream;
 
-        //add all planned meals to fileContent each plan on a separate line
+        //add all planned meals to fileContent each plan on a separate line with datestring and mealname seperated by ;
         for (MealPlan mp : plannedDaysList) {
             fileContent += mp.getDateString() + ";" + mp.getPlannedMeal().getName() + "\n";
         }
@@ -137,7 +140,10 @@ public class DataController {
             }
             String fullString = stringBuilder.toString();
 
+            //prepare plan list
             plannedDaysList.clear();
+
+            //scan over the string, every line contains a dateString and a meal name seperated by ;
             Scanner scn = new Scanner(fullString);
             while (scn.hasNext()) {
                 String planLine = scn.nextLine();
@@ -155,7 +161,7 @@ public class DataController {
         }
     }
 
-    //Adds a planned meal to the hashmap
+    //Adds a planned meal to the list or replace the meal if it already exists
     public void addPlan(MealPlan mp) {
         if (findPlan(mp.getDateString()) == null) {
             plannedDaysList.add(mp);
@@ -164,6 +170,7 @@ public class DataController {
         }
     }
 
+    //remove a planned meal from the arrayList based on string
     public void removePlan(String dateString) {
         for (int i = 0; i < plannedDaysList.size(); i++) {
             if (plannedDaysList.get(i).getDateString().equals(dateString)) {
@@ -173,6 +180,7 @@ public class DataController {
         }
     }
 
+    //find a plan with the corresponding date
     public MealPlan findPlan(String dateString) {
         for (int i = 0; i < plannedDaysList.size(); i++) {
             if (plannedDaysList.get(i).getDateString().equals(dateString)) {
@@ -182,7 +190,7 @@ public class DataController {
         return null;
     }
 
-    //returns the hashmap
+    //returns the arraylist of plans
     public ArrayList<MealPlan> getPlannedDaysList() {
         return plannedDaysList;
     }
