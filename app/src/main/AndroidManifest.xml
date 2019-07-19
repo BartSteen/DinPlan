@@ -12,27 +12,31 @@
         <activity
             android:name=".activity_weekly_calendar"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme"
+            android:label=""/>
         <activity
             android:name=".activity_calendar"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme"
+            android:label=""/>
         <activity
             android:name=".activity_meal_list"
-            android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme"
+            android:label=""/>
         <activity
             android:name=".activity_add_ingredient"
             android:parentActivityName=".activity_add_meal"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme"
+            android:label=""/>
         <activity
             android:name=".activity_add_meal"
-            android:label="@string/title_activity_second"
+            android:label=""
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustNothing" />
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustNothing"
+            />
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait">

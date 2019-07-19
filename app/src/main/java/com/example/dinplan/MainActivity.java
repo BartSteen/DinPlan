@@ -21,16 +21,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        //Add button  event for adding meal
-        Button btnNext = findViewById(R.id.btn_next);
-        btnNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent myIntent = new Intent(getBaseContext(), activity_add_meal.class);
-                startActivity(myIntent);
-            }
-        });
-
         //button for going directly to the meal list
         Button btnMealList = findViewById(R.id.btn_mealList);
         btnMealList.setOnClickListener(new View.OnClickListener() {

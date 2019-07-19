@@ -6,6 +6,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 
@@ -21,6 +24,7 @@ public class activity_meal_list extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meal_list);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         dataCont = new DataController(getBaseContext());
         dataCont.loadMealList();
@@ -51,8 +55,19 @@ public class activity_meal_list extends AppCompatActivity {
 
         initRecyclerView();
 
-        RecyclerView recyclerView = findViewById(R.id.recycler_meal_list);
-        recyclerView.getAdapter().notifyDataSetChanged();
+      //  RecyclerView recyclerView = findViewById(R.id.recycler_meal_list);
+    //    recyclerView.getAdapter().notifyDataSetChanged();
+
+        //Add button  event for adding meal
+        Button btnAddMeal = findViewById(R.id.btn_add_meal);
+        btnAddMeal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(getBaseContext(), activity_add_meal.class);
+                startActivity(myIntent);
+            }
+        });
+
 
     }
 
@@ -61,6 +76,16 @@ public class activity_meal_list extends AppCompatActivity {
         RecyclerViewAdapterMeal adapter = new RecyclerViewAdapterMeal(this, dateString, dataCont);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    //THIS CAN GO BACK TO SAVED MEALS **
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     //set the screen to go back to
