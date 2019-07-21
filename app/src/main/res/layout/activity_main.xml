@@ -26,7 +26,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="256dp"
         android:layout_marginEnd="8dp"
-        android:text="Week"
+        android:text="Planning"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -58,5 +58,32 @@
         app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_weekly_calendar" />
+
+    <TextView
+        android:id="@+id/txt_today"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="32dp"
+        android:text="Today:"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/btn_weekly_calendar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_start" />
+
+    <TextView
+        android:id="@+id/txt_today_plan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="TextView"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_today" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
