@@ -57,7 +57,7 @@ public class RecyclerViewAdapterMeal extends RecyclerView.Adapter<RecyclerViewAd
                     //show meal screen
                     Intent myIntent = new Intent(mContext, activity_add_meal.class);
                     myIntent.putExtra("Meal", currentMeal);
-                    mContext.startActivity(myIntent);
+                    ((Activity) mContext).startActivityForResult(myIntent, 1);
                 } else {
                     //go back with the planned meal
                     dataCont.addPlan(new MealPlan(dateString, currentMeal));

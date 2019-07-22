@@ -50,9 +50,14 @@ public class activity_add_meal extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     //delete by passing oldName data in intent
-                    Intent myIntent = new Intent(getBaseContext(), activity_meal_list.class);
-                    myIntent.putExtra("oldName", oldName);
-                    startActivity(myIntent);
+                   // Intent myIntent = new Intent(getBaseContext(), activity_meal_list.class);
+                   // myIntent.putExtra("oldName", oldName);
+                   // startActivity(myIntent);
+
+                    Intent returnIntent = new Intent();
+                    returnIntent.putExtra("oldName", oldName);
+                    setResult(Activity.RESULT_OK, returnIntent);
+                    finish();
                 }
             });
         } else {
@@ -82,15 +87,20 @@ public class activity_add_meal extends AppCompatActivity {
                     currentMeal.setName(mealNameEtxt.getText().toString());
                     currentMeal.setIngredients(ingredientsList);
 
-                    Intent myIntent = new Intent(getBaseContext(), activity_meal_list.class);
-                    myIntent.putExtra("Meal", currentMeal);
+                   // Intent myIntent = new Intent(getBaseContext(), activity_meal_list.class);
+                    //myIntent.putExtra("Meal", currentMeal);
+
+                    Intent returnIntent = new Intent();
+                    returnIntent.putExtra("Meal", currentMeal);
+
 
                     //if this was an edit
                     if (oldName != null) {
-                        myIntent.putExtra("oldName", oldName);
+                        returnIntent.putExtra("oldName", oldName);
                     }
 
-                    startActivity(myIntent);
+                    setResult(Activity.RESULT_OK, returnIntent);
+                    finish();
                 } else {
                     Toast.makeText(getBaseContext(), "Please give this meal a name", Toast.LENGTH_SHORT).show();
                 }
