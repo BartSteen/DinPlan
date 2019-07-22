@@ -32,18 +32,8 @@ public class activity_meal_list extends AppCompatActivity {
         dataCont.loadPlan();
 
         Button btnAddMeal = findViewById(R.id.btn_add_meal);
-        //get meal just added
+        //see if we have extras
         if (getIntent().getExtras() != null) {
-
-           /* //check if this is a replacement
-            if (getIntent().getExtras().containsKey("oldName")) {
-                dataCont.removeMealFromList((String) getIntent().getExtras().get("oldName"));
-            }
-            //check if this is adding an meal (rather than delete)
-            if (getIntent().getExtras().containsKey("Meal")) {
-                Meal newMeal = (Meal) getIntent().getSerializableExtra("Meal");
-                dataCont.addMealToList(newMeal);
-            } */
 
             //if we are planning a meal
             if (getIntent().getExtras().containsKey("date")) {
@@ -51,19 +41,15 @@ public class activity_meal_list extends AppCompatActivity {
 
                 TextView topText = findViewById(R.id.txt_meal_list);
                 topText.setText("Plan for: " + dateString);
+                //hide add meal button
                 btnAddMeal.setVisibility(View.GONE);
             }
 
-           // dataCont.saveMealList();
         }
 
         initRecyclerView();
 
-      //  RecyclerView recyclerView = findViewById(R.id.recycler_meal_list);
-    //    recyclerView.getAdapter().notifyDataSetChanged();
-
         //Add button  event for adding meal
-
         btnAddMeal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -71,8 +57,6 @@ public class activity_meal_list extends AppCompatActivity {
                 startActivityForResult(myIntent, 1);
             }
         });
-
-
     }
 
     private void initRecyclerView() {
@@ -82,7 +66,7 @@ public class activity_meal_list extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    //THIS CAN GO BACK TO SAVED MEALS **
+    //for the arrow in the top left corner
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -92,13 +76,6 @@ public class activity_meal_list extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    //set the screen to go back to
-  /*  @Override
-    public void onBackPressed()
-    {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-    }*/
 
     //triggers when an ingredient is added
     @Override
@@ -107,18 +84,20 @@ public class activity_meal_list extends AppCompatActivity {
         if (requestCode == 1) {
             //if successful
             if(resultCode == Activity.RESULT_OK){
-                //check if this is a replacement
-                if (data.getExtras().containsKey("oldName")) {
-                    dataCont.removeMealFromList((String) data.getExtras().get("oldName"));
+                //check if this has an oldId, so if it is an edit or removal
+                if (data.getExtras().containsKey("oldId")) {
+                    dataCont.removeMealFromList((String) data.getExtras().get("oldId"));
                 }
-                //check if this is adding an meal (rather than delete)
+                //check if this is an edit or add
                 if (data.getExtras().containsKey("Meal")) {
                     Meal newMeal = (Meal) data.getSerializableExtra("Meal");
                     dataCont.addMealToList(newMeal);
                 }
 
+                //save changes
                 dataCont.saveMealList();
 
+                //update recyclerview
                 RecyclerView recyclerView = findViewById(R.id.recycler_meal_list);
                 recyclerView.getAdapter().notifyDataSetChanged();
             }

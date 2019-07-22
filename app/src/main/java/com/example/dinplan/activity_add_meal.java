@@ -15,13 +15,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 
 public class activity_add_meal extends AppCompatActivity {
 
-    private ArrayList<Ingredient> ingredientsList = new ArrayList<>();
     private Meal currentMeal;
-    String oldName;
+    private Boolean edit = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,29 +37,23 @@ public class activity_add_meal extends AppCompatActivity {
             //set up the current meal to adjust
             currentMeal = (Meal) getIntent().getExtras().get("Meal");
             mealNameEtxt.setText(currentMeal.getName());
-            ingredientsList = currentMeal.getIngredients();
-
-            oldName = currentMeal.getName();
-
+            edit = true;
             upperTxt.setText("Edit Meal");
 
             //set action for delete button
             btnDelMeal.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //delete by passing oldName data in intent
-                   // Intent myIntent = new Intent(getBaseContext(), activity_meal_list.class);
-                   // myIntent.putExtra("oldName", oldName);
-                   // startActivity(myIntent);
-
+                    //delete by adding "oldId" as an extra
                     Intent returnIntent = new Intent();
-                    returnIntent.putExtra("oldName", oldName);
+                    returnIntent.putExtra("oldId", currentMeal.getId());
                     setResult(Activity.RESULT_OK, returnIntent);
                     finish();
                 }
             });
         } else {
             currentMeal = new Meal();
+            //get rid of delete button
             btnDelMeal.setVisibility(View.GONE);
         }
 
@@ -85,18 +77,12 @@ public class activity_add_meal extends AppCompatActivity {
                 //check if it has a name
                 if (!mealNameEtxt.getText().toString().equals("")) {
                     currentMeal.setName(mealNameEtxt.getText().toString());
-                    currentMeal.setIngredients(ingredientsList);
-
-                   // Intent myIntent = new Intent(getBaseContext(), activity_meal_list.class);
-                    //myIntent.putExtra("Meal", currentMeal);
 
                     Intent returnIntent = new Intent();
                     returnIntent.putExtra("Meal", currentMeal);
 
-
-                    //if this was an edit
-                    if (oldName != null) {
-                        returnIntent.putExtra("oldName", oldName);
+                    if (edit) {
+                        returnIntent.putExtra("oldId", currentMeal.getId());
                     }
 
                     setResult(Activity.RESULT_OK, returnIntent);
@@ -109,31 +95,10 @@ public class activity_add_meal extends AppCompatActivity {
         });
     }
 
-    //add an ingredient to the list for the view if the name is available
-    private void addIngToList(Ingredient ing) {
-        for (int i = 0; i < ingredientsList.size(); i++) {
-            if (ingredientsList.get(i).getName().equals(ing.getName())) {
-                ingredientsList.set(i, ing);
-                return;
-            }
-        }
-        ingredientsList.add(ing);
-    }
-
-    //remove the ingredient with name from the list
-    private void removeFromList(String name) {
-        for (int i = 0; i < ingredientsList.size(); i++) {
-            if (ingredientsList.get(i).getName().equals(name)) {
-                ingredientsList.remove(i);
-                return;
-            }
-        }
-    }
-
     //initialize recycler view
     private void initRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.ingredientView);
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(ingredientsList, this);//(mNames, mAmounts, mUnits, this);
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(currentMeal.getIngredients(), this);//(mNames, mAmounts, mUnits, this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -156,12 +121,12 @@ public class activity_add_meal extends AppCompatActivity {
             if(resultCode == Activity.RESULT_OK){
                 //check if this is a replacement
                 if (data.getExtras().containsKey("oldName")) {
-                    removeFromList((String) data.getExtras().get("oldName"));
+                    currentMeal.removeIngredient((String) data.getExtras().get("oldName"));
                 }
                 //check if this is adding an ingredient (rather than delete)
                 if(data.getExtras().containsKey("Ingredient")) {
                     Ingredient newIngredient = (Ingredient) data.getSerializableExtra("Ingredient");
-                    addIngToList(newIngredient);
+                    currentMeal.addIngredient(newIngredient);
                 }
 
                 RecyclerView recyclerView = findViewById(R.id.ingredientView);

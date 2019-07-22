@@ -22,16 +22,6 @@ public class DataController {
         this.curContext = curContext;
     }
 
-    //find the meal based on name and returns it, if it doesn't exist return null
-    public Meal findMeal(String id) {
-        for (Meal curMeal : mealArrayList) {
-            if (id.equals(curMeal.getName())) {
-                return curMeal;
-            }
-        }
-        return null;
-    }
-
 
     //Saves the arraylist with the meals in a file in internal storage
     public void saveMealList() {
@@ -41,6 +31,8 @@ public class DataController {
         //add all the meal data to fileContent
         for (Meal mealCur : mealArrayList) {
             fileContent += mealCur.getName() + "\n";
+            fileContent += mealCur.getId() + "\n";
+            //save all ingredients data seperated by a ; and all ingredients seperated by |
             for (Ingredient ingCur : mealCur.getIngredients()) {
                 fileContent += ingCur.getName() + ";" + ingCur.getAmount() + ";" + ingCur.getUnit() + "|";
             }
@@ -82,23 +74,28 @@ public class DataController {
                 //remove all not visible characters
                 mealName.replaceAll("\\s", "");
 
+                String mealId = scn.nextLine();
+                mealId.replaceAll("\\s", "");
+
                 //temperary arraylist to store the ingredients
                 ArrayList<Ingredient> ingList = new ArrayList<>();
                 //ingredients are stored on one line separated by a | char
                 String ingredientsString = scn.nextLine();
                 String[] ingredientsSeparate = ingredientsString.split("\\|");
 
+                //loop over all ingredients
                 for (String ingString : ingredientsSeparate) {
                     //within each ingredient the variables are separated by ;
                     String[] sepComponents = ingString.split(";");
                     String ingName = sepComponents[0];
                     Float ingAmount = Float.valueOf(sepComponents[1]);
                     String ingUnit = sepComponents[2];
+                    //add ingredient gained from string to the list
                     ingList.add( new Ingredient(ingName, ingAmount, ingUnit));
                 }
 
                 //add the meal to the list
-                mealArrayList.add(new Meal(mealName, ingList, ""));
+                mealArrayList.add(new Meal(mealName, ingList, "", mealId));
             }
 
         } catch (Exception e) {
@@ -112,8 +109,9 @@ public class DataController {
         FileOutputStream outputStream;
 
         //add all planned meals to fileContent each plan on a separate line with datestring and mealname seperated by ;
+        //for meal only the unique id is stored
         for (MealPlan mp : plannedDaysList) {
-            fileContent += mp.getDateString() + ";" + mp.getPlannedMeal().getName() + "\n";
+            fileContent += mp.getDateString() + ";" + mp.getPlannedMeal().getId() + "\n";
         }
 
         //write the fileContent to a file in internal storage
@@ -148,6 +146,8 @@ public class DataController {
             while (scn.hasNext()) {
                 String planLine = scn.nextLine();
                 String[] planComp = planLine.split(";");
+                //planComp[0] = dateString, planComp[1] = meal id
+                //check if there is a meal with such an id
                 if (findMeal(planComp[1]) != null) {
                     addPlan(new MealPlan(planComp[0], findMeal(planComp[1])));
                 } else {
@@ -170,7 +170,7 @@ public class DataController {
         }
     }
 
-    //remove a planned meal from the arrayList based on string
+    //remove a planned meal from the arrayList based on date (string)
     public void removePlan(String dateString) {
         for (int i = 0; i < plannedDaysList.size(); i++) {
             if (plannedDaysList.get(i).getDateString().equals(dateString)) {
@@ -200,21 +200,32 @@ public class DataController {
         return mealArrayList;
     }
 
-    //add a meal to the list for the view or replace if it already exists
+    //find the meal based on id and returns it, if it doesn't exist return null
+    public Meal findMeal(String id) {
+        for (Meal curMeal : mealArrayList) {
+            if (id.equals(curMeal.getId())) {
+                return curMeal;
+            }
+        }
+        return null;
+    }
+
+    //add a meal to the list giving it an unique name recursively
     public void addMealToList(Meal mealToAdd) {
         for (int i = 0; i < mealArrayList.size(); i++) {
             if (mealArrayList.get(i).getName().equals(mealToAdd.getName())) {
-                mealArrayList.set(i, mealToAdd);
+                mealToAdd.setName(mealToAdd.getName() + i);
+                addMealToList(mealToAdd);
                 return;
             }
         }
         mealArrayList.add(mealToAdd);
     }
 
-    //remove a meal from the list with the given name
-    public void removeMealFromList(String name) {
+    //remove a meal from the list with the given id
+    public void removeMealFromList(String id) {
         for (int i = 0; i < mealArrayList.size(); i++) {
-            if (mealArrayList.get(i).getName().equals(name)) {
+            if (mealArrayList.get(i).getId().equals(id)) {
                 mealArrayList.remove(i);
                 return;
             }

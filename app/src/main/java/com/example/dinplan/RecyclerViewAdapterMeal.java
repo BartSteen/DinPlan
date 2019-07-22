@@ -69,6 +69,15 @@ public class RecyclerViewAdapterMeal extends RecyclerView.Adapter<RecyclerViewAd
                 }
             }
         });
+
+        //for debugging
+        holder.parentLayout.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                Toast.makeText(mContext, "ID: " + currentMeal.getId(), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
     }
 
     //returns the amount of items
