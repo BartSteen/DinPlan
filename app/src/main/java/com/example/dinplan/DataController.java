@@ -95,7 +95,7 @@ public class DataController {
                 }
 
                 //add the meal to the list
-                mealArrayList.add(new Meal(mealName, ingList, "", mealId));
+                mealArrayList.add(new Meal(mealName, ingList,  mealId));
             }
 
         } catch (Exception e) {

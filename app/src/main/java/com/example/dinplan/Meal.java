@@ -1,6 +1,7 @@
 package com.example.dinplan;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -8,23 +9,28 @@ public class Meal implements Serializable {
 
     private String name;
     private ArrayList<Ingredient> ingredients = new ArrayList<>();
-    private String recipe;
+    private ArrayList<String> recipe = new ArrayList<>();
     private String id;
 
 
     public Meal() {
-        //place
         id = UUID.randomUUID().toString();
     }
 
-    public Meal(String name, ArrayList<Ingredient> ingredients, String recipe) {
+    public Meal(String name, ArrayList<Ingredient> ingredients, ArrayList<String> recipe) {
         this.name = name;
         this.ingredients = ingredients;
         this.recipe = recipe;
         id = UUID.randomUUID().toString();
     }
 
-    public Meal(String name, ArrayList<Ingredient> ingredients, String recipe, String id) {
+    public Meal(String name, ArrayList<Ingredient> ingredients, String id) {
+        this.name = name;
+        this.ingredients = ingredients;
+        this.id = id;
+    }
+
+    public Meal(String name, ArrayList<Ingredient> ingredients, ArrayList<String> recipe, String id) {
         this.name = name;
         this.ingredients = ingredients;
         this.recipe = recipe;
@@ -72,7 +78,8 @@ public class Meal implements Serializable {
         return id;
     }
 
-    public String getRecipe() {
+    public ArrayList<String> getRecipe() {
         return recipe;
     }
+
 }

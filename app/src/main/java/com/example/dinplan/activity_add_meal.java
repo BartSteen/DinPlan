@@ -81,6 +81,7 @@ public class activity_add_meal extends AppCompatActivity {
                     Intent returnIntent = new Intent();
                     returnIntent.putExtra("Meal", currentMeal);
 
+                    //if this is an edit add oldId as extra so the meal replaces itself in the list
                     if (edit) {
                         returnIntent.putExtra("oldId", currentMeal.getId());
                     }
@@ -117,7 +118,7 @@ public class activity_add_meal extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (requestCode == 1) {
-            //if successful:
+            //if successful
             if(resultCode == Activity.RESULT_OK){
                 //check if this is a replacement
                 if (data.getExtras().containsKey("oldName")) {
