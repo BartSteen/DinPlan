@@ -14,11 +14,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 
-public class RecyclerViewAdapterWeekly extends RecyclerView.Adapter<RecyclerViewAdapterWeekly.ViewHolder>{
+public class RecyclerViewAdapterWeekly extends RecyclerView.Adapter<RecyclerViewAdapterWeekly.ViewHolder> {
 
     //variables
     DataController dataCont;
@@ -28,7 +29,7 @@ public class RecyclerViewAdapterWeekly extends RecyclerView.Adapter<RecyclerView
 
     //constructor
     public RecyclerViewAdapterWeekly(DataController dataCont, Context mContext, Calendar cal, String todayDateString) {
-        this.dataCont =  dataCont;
+        this.dataCont = dataCont;
         this.mContext = mContext;
         this.curCal = (Calendar) cal.clone();
         this.todayDateString = todayDateString;
@@ -58,8 +59,13 @@ public class RecyclerViewAdapterWeekly extends RecyclerView.Adapter<RecyclerView
         Calendar tempCal = (Calendar) curCal.clone();
         tempCal.add(Calendar.DATE, position);
 
+        //get day name of current date
+        SimpleDateFormat formatter = new SimpleDateFormat("EEEE");
+        String dayName = formatter.format(tempCal.getTime());
+
+        //set the texts
         final String dateString = String.format("%d-%d-%d", tempCal.get(Calendar.DAY_OF_MONTH), tempCal.get(Calendar.MONTH) + 1, tempCal.get(Calendar.YEAR));
-        holder.dayDate.setText(dateString);
+        holder.dayDate.setText(dayName + " " + dateString);
         if (dataCont.findPlan(dateString) != null) {
             holder.nameMeal.setText(dataCont.findPlan(dateString).getPlannedMeal().getName());
         } else {
@@ -90,7 +96,7 @@ public class RecyclerViewAdapterWeekly extends RecyclerView.Adapter<RecyclerView
             public boolean onLongClick(View view) {
                 //remove the plan
                 if (dataCont.findPlan(dateString) != null) {
-                    Toast.makeText(mContext, "Removed " + dataCont.findPlan(dateString).getPlannedMeal().getName() +  " on " + dateString, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "Removed " + dataCont.findPlan(dateString).getPlannedMeal().getName() + " on " + dateString, Toast.LENGTH_SHORT).show();
                     dataCont.removePlan(dateString);
                     dataCont.savePlan();
                     notifyDataSetChanged();
@@ -121,4 +127,5 @@ public class RecyclerViewAdapterWeekly extends RecyclerView.Adapter<RecyclerView
             parentLayout = itemView.findViewById(R.id.parent_layout_week);
         }
     }
+
 }
