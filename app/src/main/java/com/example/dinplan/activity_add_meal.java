@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -109,8 +111,22 @@ public class activity_add_meal extends AppCompatActivity {
             case android.R.id.home:
                 finish();
                 return true;
+
+            case R.id.option_delete:
+                //delete by adding "oldId" as an extra
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("oldId", currentMeal.getId());
+                setResult(Activity.RESULT_OK, returnIntent);
+                finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_meal_settings, menu);
+        return true;
     }
 
     //triggers when an ingredient is added

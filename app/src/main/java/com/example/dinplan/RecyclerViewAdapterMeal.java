@@ -14,19 +14,20 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class RecyclerViewAdapterMeal extends RecyclerView.Adapter<RecyclerViewAdapterMeal.ViewHolder>{
 
     //variables
     private Context mContext;
-    private String dateString;
+    private ArrayList<String> dateList;
     private DataController dataCont;
 
     //constructor
-    public RecyclerViewAdapterMeal(Context mContext, String dateString, DataController dataCont) {
+    public RecyclerViewAdapterMeal(Context mContext, ArrayList<String> dateList, DataController dataCont) {
         this.mContext = mContext;
-        this.dateString = dateString;
+        this.dateList = dateList;
         this.dataCont = dataCont;
     }
 
@@ -52,16 +53,19 @@ public class RecyclerViewAdapterMeal extends RecyclerView.Adapter<RecyclerViewAd
 
                 //Toast.makeText(mContext, currentMeal.getName(), Toast.LENGTH_SHORT).show();
 
-                //if we are not selecting
-                if (dateString == null) {
+                //if we are not selecting for plan
+                if (dateList.size() == 0 ) {
                     //show meal screen
                     Intent myIntent = new Intent(mContext, activity_add_meal.class);
                     myIntent.putExtra("Meal", currentMeal);
                     ((Activity) mContext).startActivityForResult(myIntent, 1);
                 } else {
-                    //go back with the planned meal
-                    dataCont.addPlan(new MealPlan(dateString, currentMeal));
+                    //plan meal for all dates in the list
+                    for (int i = 0; i < dateList.size(); i++) {
+                        dataCont.addPlan(new MealPlan(dateList.get(i), currentMeal));
+                    }
                     dataCont.savePlan();
+
 
                     Intent returnIntent = new Intent();
                     ((Activity) mContext).setResult(Activity.RESULT_OK, returnIntent);

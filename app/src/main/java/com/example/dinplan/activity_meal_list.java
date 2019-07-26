@@ -12,13 +12,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 
 public class activity_meal_list extends AppCompatActivity {
 
 
-    public String dateString;
     private DataController dataCont;
-
+    private ArrayList<String> dateList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,11 +37,15 @@ public class activity_meal_list extends AppCompatActivity {
         if (getIntent().getExtras() != null) {
 
             //if we are planning a meal
-            if (getIntent().getExtras().containsKey("date")) {
-                dateString = (String) getIntent().getExtras().get("date");
+            if (getIntent().getExtras().containsKey("dateList")) {
+                dateList = (ArrayList<String>) getIntent().getExtras().get("dateList");
 
                 TextView topText = findViewById(R.id.txt_meal_list);
-                topText.setText("Plan for: " + dateString);
+                if (dateList.size() == 1) {
+                    topText.setText("Plan for: " + dateList.get(0));
+                } else {
+                    topText.setText("Plan for " + dateList.size() + " meals");
+                }
                 //hide add meal button
                 btnAddMeal.setVisibility(View.GONE);
             }
@@ -61,7 +66,7 @@ public class activity_meal_list extends AppCompatActivity {
 
     private void initRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.recycler_meal_list);
-        RecyclerViewAdapterMeal adapter = new RecyclerViewAdapterMeal(this, dateString, dataCont);
+        RecyclerViewAdapterMeal adapter = new RecyclerViewAdapterMeal(this, dateList, dataCont);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }

@@ -7,12 +7,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -51,7 +56,10 @@ public class activity_weekly_calendar extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 curCal.add(Calendar.DATE,  -7);
-                initRecyclerView();
+               // initRecyclerView();
+                RecyclerView recyclerView = findViewById(R.id.recycler_weekly);
+                RecyclerViewAdapterWeekly adapterWeekly = (RecyclerViewAdapterWeekly) recyclerView.getAdapter();
+                adapterWeekly.updateCal(curCal);
                 headerTxt.setText("Week " + curCal.get(Calendar.WEEK_OF_YEAR));
             }
         });
@@ -62,7 +70,10 @@ public class activity_weekly_calendar extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 curCal.add(Calendar.DATE, 7);
-                initRecyclerView();
+                RecyclerView recyclerView = findViewById(R.id.recycler_weekly);
+                RecyclerViewAdapterWeekly adapterWeekly = (RecyclerViewAdapterWeekly) recyclerView.getAdapter();
+                adapterWeekly.updateCal(curCal);
+                //initRecyclerView();
                 headerTxt.setText("Week " + curCal.get(Calendar.WEEK_OF_YEAR));
             }
         });
@@ -82,13 +93,45 @@ public class activity_weekly_calendar extends AppCompatActivity {
         });
     }
 
+    //back button in action bar
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
                 return true;
+            case R.id.option_plan_selected:
+                //get list of selected days
+                RecyclerView recyclerViewP = findViewById(R.id.recycler_weekly);
+                RecyclerViewAdapterWeekly adapterWeeklyP = (RecyclerViewAdapterWeekly) recyclerViewP.getAdapter();
+                ArrayList<String> selectedDaysListP = adapterWeeklyP.getSelectedDates();
+
+                //go to planning screen
+                Intent myIntent = new Intent(getBaseContext(), activity_meal_list.class);
+                myIntent.putExtra("dateList", selectedDaysListP);
+                startActivityForResult(myIntent, 1);
+                return true;
+            case R.id.option_clear_selected:
+                //get list of selected days
+                RecyclerView recyclerView = findViewById(R.id.recycler_weekly);
+                RecyclerViewAdapterWeekly adapterWeekly = (RecyclerViewAdapterWeekly) recyclerView.getAdapter();
+                ArrayList<String> selectedDaysList = adapterWeekly.getSelectedDates();
+
+                //remove all those plans
+                for (int i = 0; i < selectedDaysList.size(); i++ ) {
+                    dataCont.removePlan(selectedDaysList.get(i));
+                }
+                dataCont.savePlan();
+                initRecyclerView();
+                return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_calendar_settings, menu);
+        return true;
     }
 
     @Override
