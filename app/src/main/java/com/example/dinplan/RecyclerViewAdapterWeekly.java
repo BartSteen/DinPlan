@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -29,6 +31,7 @@ public class RecyclerViewAdapterWeekly extends RecyclerView.Adapter<RecyclerView
     Calendar curCal;
     private String todayDateString;
     private ArrayList<String> selectedDates = new ArrayList<>();
+    private Menu curMenu;
 
     //constructor
     public RecyclerViewAdapterWeekly(DataController dataCont, Context mContext, Calendar cal, String todayDateString) {
@@ -44,6 +47,10 @@ public class RecyclerViewAdapterWeekly extends RecyclerView.Adapter<RecyclerView
         } else {
             curCal.add(Calendar.DATE, -(curCal.get(Calendar.DAY_OF_WEEK) - curCal.getFirstDayOfWeek()));
         }
+    }
+
+    public void giveMenu(Menu curMenu) {
+        this.curMenu = curMenu;
     }
 
     public void updateCal(Calendar cal) {
@@ -119,7 +126,7 @@ public class RecyclerViewAdapterWeekly extends RecyclerView.Adapter<RecyclerView
             public boolean onLongClick(View view) {
                 //remove the plan
                 if (dataCont.findPlan(dateString) != null) {
-                    Toast.makeText(mContext, "Removed " + dataCont.findPlan(dateString).getPlannedMeal().getName() + " on " + dateString, Toast.LENGTH_SHORT).show();
+               //     Toast.makeText(mContext, "Removed " + dataCont.findPlan(dateString).getPlannedMeal().getName() + " on " + dateString, Toast.LENGTH_SHORT).show();
                     //dataCont.removePlan(dateString);
                     //dataCont.savePlan();
                     //notifyDataSetChanged();
@@ -130,6 +137,7 @@ public class RecyclerViewAdapterWeekly extends RecyclerView.Adapter<RecyclerView
                 } else {
                     selectedDates.add(dateString);
                 }
+                setMenuEnables();
                 notifyDataSetChanged();
                 return true;
             }
@@ -175,9 +183,24 @@ public class RecyclerViewAdapterWeekly extends RecyclerView.Adapter<RecyclerView
             }
         }
     }
-    
+
 
     public ArrayList<String> getSelectedDates() {
         return selectedDates;
+    }
+
+    public void setMenuEnables() {
+        if (curMenu != null) {
+            MenuItem clearItem = curMenu.findItem(R.id.option_clear_selected);
+            MenuItem planItem = curMenu.findItem(R.id.option_plan_selected);
+
+            if (selectedDates.size() == 0) {
+                clearItem.setEnabled(false);
+                planItem.setEnabled(false);
+            } else {
+                clearItem.setEnabled(true);
+                planItem.setEnabled(true);
+            }
+        }
     }
 }

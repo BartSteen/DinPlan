@@ -19,11 +19,18 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:label=""/>
-        <activity
-            android:name=".activity_meal_list"
+        <activity android:name=".activity_meal_list">
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
-            android:label=""/>
+            android:label=""
+        <intent-filter>
+            <action android:name="android.intent.action.SEARCH" />
+        </intent-filter>
+
+        <meta-data
+            android:name="android.app.searchable"
+            android:resource="@xml/searchable" />
+        </activity>
         <activity
             android:name=".activity_add_ingredient"
             android:parentActivityName=".activity_add_meal"

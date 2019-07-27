@@ -23,12 +23,22 @@ public class RecyclerViewAdapterMeal extends RecyclerView.Adapter<RecyclerViewAd
     private Context mContext;
     private ArrayList<String> dateList;
     private DataController dataCont;
+    private ArrayList<Meal> activeList;
 
     //constructor
     public RecyclerViewAdapterMeal(Context mContext, ArrayList<String> dateList, DataController dataCont) {
         this.mContext = mContext;
         this.dateList = dateList;
         this.dataCont = dataCont;
+        this.activeList = dataCont.getMealArrayList();
+    }
+
+    //constructor
+    public RecyclerViewAdapterMeal(Context mContext, ArrayList<String> dateList, DataController dataCont, ArrayList<Meal> activeList) {
+        this.mContext = mContext;
+        this.dateList = dateList;
+        this.dataCont = dataCont;
+        this.activeList = activeList;
     }
 
     //idk
@@ -43,7 +53,7 @@ public class RecyclerViewAdapterMeal extends RecyclerView.Adapter<RecyclerViewAd
     //when something new is added?
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        final Meal currentMeal = dataCont.getMealArrayList().get(position);
+        final Meal currentMeal = activeList.get(position);
         holder.name.setText(currentMeal.getName());
         holder.ingCount.setText(Integer.toString(currentMeal.getIngredients().size()));
 
@@ -87,7 +97,7 @@ public class RecyclerViewAdapterMeal extends RecyclerView.Adapter<RecyclerViewAd
     //returns the amount of items
     @Override
     public int getItemCount() {
-        return dataCont.getMealArrayList().size();
+        return activeList.size();
     }
 
     //who even knows

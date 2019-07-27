@@ -16,7 +16,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -131,6 +130,17 @@ public class activity_weekly_calendar extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_calendar_settings, menu);
+
+        //disable on create
+        MenuItem clearItem = menu.findItem(R.id.option_clear_selected);
+        MenuItem planItem = menu.findItem(R.id.option_plan_selected);
+        clearItem.setEnabled(false);
+        planItem.setEnabled(false);
+
+        //pass menu on to adapter
+        RecyclerView recyclerView = findViewById(R.id.recycler_weekly);
+        RecyclerViewAdapterWeekly adapterWeekly = (RecyclerViewAdapterWeekly) recyclerView.getAdapter();
+        adapterWeekly.giveMenu(menu);
         return true;
     }
 

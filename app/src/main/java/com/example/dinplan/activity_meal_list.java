@@ -7,9 +7,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -71,6 +74,13 @@ public class activity_meal_list extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
+    private void initRecyclerViewQuery(ArrayList<Meal> queryList) {
+        RecyclerView recyclerView = findViewById(R.id.recycler_meal_list);
+        RecyclerViewAdapterMeal adapter = new RecyclerViewAdapterMeal(this, dateList, dataCont, queryList);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
     //for the arrow in the top left corner
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()) {
@@ -82,6 +92,47 @@ public class activity_meal_list extends AppCompatActivity {
     }
 
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_search_meal, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.option_search);
+
+        SearchView curSearchView = (SearchView) searchItem.getActionView();
+        curSearchView.setFocusable(false);
+        curSearchView.setQueryHint("Search");
+        curSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                System.out.println(s);
+                ArrayList<Meal> queryList = dataCont.getMealArrayList();
+                String strQuery = s.toLowerCase();
+                ArrayList<Meal> resultList = new ArrayList<>();
+
+                //search in the list
+                for (int i = 0; i < queryList.size(); i++) {
+                    if(queryList.get(i).getName().toLowerCase().contains(strQuery)) {
+                        resultList.add(queryList.get(i));
+                    }
+                }
+
+                initRecyclerViewQuery(resultList);
+                return true;
+            }
+        });
+        return true;
+    }
+
+
     //triggers when an ingredient is added
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -89,6 +140,7 @@ public class activity_meal_list extends AppCompatActivity {
         if (requestCode == 1) {
             //if successful
             if(resultCode == Activity.RESULT_OK){
+
                 //check if this has an oldId, so if it is an edit or removal
                 if (data.getExtras().containsKey("oldId")) {
                     dataCont.removeMealFromList((String) data.getExtras().get("oldId"));
@@ -103,8 +155,9 @@ public class activity_meal_list extends AppCompatActivity {
                 dataCont.saveMealList();
 
                 //update recyclerview
-                RecyclerView recyclerView = findViewById(R.id.recycler_meal_list);
-                recyclerView.getAdapter().notifyDataSetChanged();
+                //RecyclerView recyclerView = findViewById(R.id.recycler_meal_list);
+                //recyclerView.getAdapter().notifyDataSetChanged();
+                initRecyclerView();
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 //Write your code if there's no result
