@@ -87,11 +87,13 @@ public class DataController {
                 for (String ingString : ingredientsSeparate) {
                     //within each ingredient the variables are separated by ;
                     String[] sepComponents = ingString.split(";");
-                    String ingName = sepComponents[0];
-                    Float ingAmount = Float.valueOf(sepComponents[1]);
-                    String ingUnit = sepComponents[2];
-                    //add ingredient gained from string to the list
-                    ingList.add( new Ingredient(ingName, ingAmount, ingUnit));
+                    if (sepComponents.length == 3) {
+                        String ingName = sepComponents[0];
+                        Float ingAmount = Float.valueOf(sepComponents[1]);
+                        String ingUnit = sepComponents[2];
+                        //add ingredient gained from string to the list
+                        ingList.add(new Ingredient(ingName, ingAmount, ingUnit));
+                    }
                 }
 
                 //add the meal to the list

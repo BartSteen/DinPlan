@@ -23,6 +23,7 @@ public class activity_meal_list extends AppCompatActivity {
 
     private DataController dataCont;
     private ArrayList<String> dateList = new ArrayList<>();
+    SearchView curSearchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +68,7 @@ public class activity_meal_list extends AppCompatActivity {
         });
     }
 
+    //initialize and sets up the recycler view
     private void initRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.recycler_meal_list);
         RecyclerViewAdapterMeal adapter = new RecyclerViewAdapterMeal(this, dateList, dataCont);
@@ -74,7 +76,8 @@ public class activity_meal_list extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    private void initRecyclerViewQuery(ArrayList<Meal> queryList) {
+    //same but with a list of meals that should be shown
+    private void initRecyclerView(ArrayList<Meal> queryList) {
         RecyclerView recyclerView = findViewById(R.id.recycler_meal_list);
         RecyclerViewAdapterMeal adapter = new RecyclerViewAdapterMeal(this, dateList, dataCont, queryList);
         recyclerView.setAdapter(adapter);
@@ -99,37 +102,50 @@ public class activity_meal_list extends AppCompatActivity {
 
         MenuItem searchItem = menu.findItem(R.id.option_search);
 
-        SearchView curSearchView = (SearchView) searchItem.getActionView();
+        curSearchView = (SearchView) searchItem.getActionView();
         curSearchView.setFocusable(false);
         curSearchView.setQueryHint("Search");
         curSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
 
+            //when search button is pressed on the keyboard
             @Override
             public boolean onQueryTextSubmit(String s) {
-
                 return false;
             }
 
+            //when a character is added or removed
             @Override
             public boolean onQueryTextChange(String s) {
-                System.out.println(s);
+                //set up for query on meal list
                 ArrayList<Meal> queryList = dataCont.getMealArrayList();
                 String strQuery = s.toLowerCase();
                 ArrayList<Meal> resultList = new ArrayList<>();
 
-                //search in the list
+                //search in the list if it the meal name contains the query
                 for (int i = 0; i < queryList.size(); i++) {
                     if(queryList.get(i).getName().toLowerCase().contains(strQuery)) {
                         resultList.add(queryList.get(i));
                     }
                 }
 
-                initRecyclerViewQuery(resultList);
+                //let the recycler view show the result
+                initRecyclerView(resultList);
                 return true;
             }
         });
         return true;
+    }
+
+    //override back press of android
+    @Override
+    public void onBackPressed() {
+        //if search bar is out, close it else normal behaviour
+        if (curSearchView.isIconified()) {
+            super.onBackPressed();
+        } else {
+            curSearchView.setIconified(true);
+        }
     }
 
 
@@ -151,12 +167,12 @@ public class activity_meal_list extends AppCompatActivity {
                     dataCont.addMealToList(newMeal);
                 }
 
-                //save changes
+                //save possible changes
                 dataCont.saveMealList();
 
-                //update recyclerview
-                //RecyclerView recyclerView = findViewById(R.id.recycler_meal_list);
-                //recyclerView.getAdapter().notifyDataSetChanged();
+                //Resets searchview and recycler view upon returning
+                curSearchView.setQuery("", false);
+                curSearchView.setIconified(true);
                 initRecyclerView();
             }
             if (resultCode == Activity.RESULT_CANCELED) {
