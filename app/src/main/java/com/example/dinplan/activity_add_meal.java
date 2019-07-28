@@ -101,11 +101,12 @@ public class activity_add_meal extends AppCompatActivity {
     //initialize recycler view
     private void initRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.ingredientView);
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(currentMeal.getIngredients(), this);//(mNames, mAmounts, mUnits, this);
+        RecyclerViewAdapterIngredient adapter = new RecyclerViewAdapterIngredient(currentMeal.getIngredients(), this);//(mNames, mAmounts, mUnits, this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
+    @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()) {
             case android.R.id.home:

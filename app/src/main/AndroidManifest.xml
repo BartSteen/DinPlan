@@ -10,40 +10,45 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activity_weekly_calendar"
+            android:name=".activity_grocery_list"
+            android:label="Grocery List"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"
-            android:label=""/>
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activity_weekly_calendar"
+            android:label="Planning"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".activity_calendar"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"
-            android:label=""/>
-        <activity android:name=".activity_meal_list">
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"
             android:label=""
-        <intent-filter>
-            <action android:name="android.intent.action.SEARCH" />
-        </intent-filter>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activity_meal_list"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:label="Meal List">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
 
-        <meta-data
-            android:name="android.app.searchable"
-            android:resource="@xml/searchable" />
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
         </activity>
         <activity
             android:name=".activity_add_ingredient"
+            android:label=""
             android:parentActivityName=".activity_add_meal"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"
-            android:label=""/>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".activity_add_meal"
             android:label=""
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
-            android:windowSoftInputMode="adjustNothing"
-            />
+            android:windowSoftInputMode="adjustNothing" />
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait">

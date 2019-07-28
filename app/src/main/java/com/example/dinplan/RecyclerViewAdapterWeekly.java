@@ -193,13 +193,16 @@ public class RecyclerViewAdapterWeekly extends RecyclerView.Adapter<RecyclerView
         if (curMenu != null) {
             MenuItem clearItem = curMenu.findItem(R.id.option_clear_selected);
             MenuItem planItem = curMenu.findItem(R.id.option_plan_selected);
+            MenuItem groceryListItem = curMenu.findItem(R.id.option_grocery_list);
 
             if (selectedDates.size() == 0) {
                 clearItem.setEnabled(false);
                 planItem.setEnabled(false);
+                groceryListItem.setEnabled(false);
             } else {
                 clearItem.setEnabled(true);
                 planItem.setEnabled(true);
+                groceryListItem.setEnabled(true);
             }
         }
     }

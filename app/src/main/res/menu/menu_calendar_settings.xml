@@ -7,4 +7,7 @@
     <item
         android:id="@+id/option_clear_selected"
         android:title="Clear Selected Days" />
+    <item
+        android:id="@+id/option_grocery_list"
+        android:title="Create Grocery List" />
 </menu>

@@ -94,33 +94,34 @@ public class activity_weekly_calendar extends AppCompatActivity {
 
     //back button in action bar
     public boolean onOptionsItemSelected(MenuItem item){
+        //get list of selected items
+        RecyclerView recyclerView = findViewById(R.id.recycler_weekly);
+        RecyclerViewAdapterWeekly adapterWeekly = (RecyclerViewAdapterWeekly) recyclerView.getAdapter();
+        ArrayList<String> selectedDaysList = adapterWeekly.getSelectedDates();
+
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
                 return true;
             case R.id.option_plan_selected:
-                //get list of selected days
-                RecyclerView recyclerViewP = findViewById(R.id.recycler_weekly);
-                RecyclerViewAdapterWeekly adapterWeeklyP = (RecyclerViewAdapterWeekly) recyclerViewP.getAdapter();
-                ArrayList<String> selectedDaysListP = adapterWeeklyP.getSelectedDates();
-
                 //go to planning screen
                 Intent myIntent = new Intent(getBaseContext(), activity_meal_list.class);
-                myIntent.putExtra("dateList", selectedDaysListP);
+                myIntent.putExtra("dateList", selectedDaysList);
                 startActivityForResult(myIntent, 1);
                 return true;
             case R.id.option_clear_selected:
-                //get list of selected days
-                RecyclerView recyclerView = findViewById(R.id.recycler_weekly);
-                RecyclerViewAdapterWeekly adapterWeekly = (RecyclerViewAdapterWeekly) recyclerView.getAdapter();
-                ArrayList<String> selectedDaysList = adapterWeekly.getSelectedDates();
-
-                //remove all those plans
+                //remove all the plans on selected days
                 for (int i = 0; i < selectedDaysList.size(); i++ ) {
                     dataCont.removePlan(selectedDaysList.get(i));
                 }
                 dataCont.savePlan();
                 initRecyclerView();
+                return true;
+            case R.id.option_grocery_list:
+                //go to grocery list activity
+                Intent grocIntent = new Intent(getBaseContext(), activity_grocery_list.class);
+                grocIntent.putExtra("dateList", selectedDaysList);
+                startActivityForResult(grocIntent, 1);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -134,8 +135,10 @@ public class activity_weekly_calendar extends AppCompatActivity {
         //disable on create
         MenuItem clearItem = menu.findItem(R.id.option_clear_selected);
         MenuItem planItem = menu.findItem(R.id.option_plan_selected);
+        MenuItem groceryListItem = menu.findItem(R.id.option_grocery_list);
         clearItem.setEnabled(false);
         planItem.setEnabled(false);
+        groceryListItem.setEnabled(false);
 
         //pass menu on to adapter
         RecyclerView recyclerView = findViewById(R.id.recycler_weekly);
@@ -152,7 +155,11 @@ public class activity_weekly_calendar extends AppCompatActivity {
             if(resultCode == Activity.RESULT_OK){
                 //load plan on returning from selecting a meal
                 dataCont.loadPlan();
-                initRecyclerView();
+                //  initRecyclerView();
+
+                RecyclerView recyclerView = findViewById(R.id.recycler_weekly);
+                RecyclerViewAdapterWeekly adapterWeekly = (RecyclerViewAdapterWeekly) recyclerView.getAdapter();
+                adapterWeekly.notifyDataSetChanged();
 
             }
             if (resultCode == Activity.RESULT_CANCELED) {
