@@ -32,6 +32,7 @@ public class RecyclerViewAdapterWeekly extends RecyclerView.Adapter<RecyclerView
     private String todayDateString;
     private ArrayList<String> selectedDates = new ArrayList<>();
     private Menu curMenu;
+    private boolean selecting = false;
 
     //constructor
     public RecyclerViewAdapterWeekly(DataController dataCont, Context mContext, Calendar cal, String todayDateString) {
@@ -111,34 +112,25 @@ public class RecyclerViewAdapterWeekly extends RecyclerView.Adapter<RecyclerView
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //show meal screen to select a meal
-                ArrayList<String> tempList = new ArrayList<>();
-                tempList.add(dateString);
+                //if we are not in selection mode
+                if (selecting == false) {
+                    //show meal screen to select a meal
+                    ArrayList<String> tempList = new ArrayList<>();
+                    tempList.add(dateString);
 
-                Intent myIntent = new Intent(mContext, activity_meal_list.class);
-                myIntent.putExtra("dateList", tempList);
-                ((Activity) mContext).startActivityForResult(myIntent, 1);
+                    Intent myIntent = new Intent(mContext, activity_meal_list.class);
+                    myIntent.putExtra("dateList", tempList);
+                    ((Activity) mContext).startActivityForResult(myIntent, 1);
+                } else { //if we are selecting
+                    handleSelection(dateString);
+                }
             }
         });
 
         holder.parentLayout.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                //remove the plan
-                if (dataCont.findPlan(dateString) != null) {
-               //     Toast.makeText(mContext, "Removed " + dataCont.findPlan(dateString).getPlannedMeal().getName() + " on " + dateString, Toast.LENGTH_SHORT).show();
-                    //dataCont.removePlan(dateString);
-                    //dataCont.savePlan();
-                    //notifyDataSetChanged();
-                }
-
-                if (dateInList(dateString)) {
-                    removeFromList(dateString);
-                } else {
-                    selectedDates.add(dateString);
-                }
-                setMenuEnables();
-                notifyDataSetChanged();
+                handleSelection(dateString);
                 return true;
             }
         });
@@ -166,7 +158,7 @@ public class RecyclerViewAdapterWeekly extends RecyclerView.Adapter<RecyclerView
         }
     }
 
-    //selection functions
+    //check if a date string is in the list of selected dates, returns true if it is
     public boolean dateInList(String dateStr) {
         for (int i = 0; i < selectedDates.size(); i++) {
             if (selectedDates.get(i).equals(dateStr)) {
@@ -176,6 +168,7 @@ public class RecyclerViewAdapterWeekly extends RecyclerView.Adapter<RecyclerView
         return false;
     }
 
+    //remove the string from the list of selected dates
     public void removeFromList(String dateStr) {
         for (int i = 0; i < selectedDates.size(); i++) {
             if (selectedDates.get(i).equals(dateStr)) {
@@ -184,25 +177,60 @@ public class RecyclerViewAdapterWeekly extends RecyclerView.Adapter<RecyclerView
         }
     }
 
+    //deals with selection of a plan
+    private void handleSelection(String dateString) {
+        if (dateInList(dateString)) {
+            removeFromList(dateString);
+        } else {
+            selectedDates.add(dateString);
+        }
+        setMenuEnables();
+        notifyDataSetChanged();
+    }
+
 
     public ArrayList<String> getSelectedDates() {
         return selectedDates;
     }
 
+    public boolean getSelecting() {
+        return selecting;
+    }
+
+    //sets the action bar stuff properly based on current status
     public void setMenuEnables() {
         if (curMenu != null) {
             MenuItem clearItem = curMenu.findItem(R.id.option_clear_selected);
             MenuItem planItem = curMenu.findItem(R.id.option_plan_selected);
             MenuItem groceryListItem = curMenu.findItem(R.id.option_grocery_list);
 
-            if (selectedDates.size() == 0) {
+            MenuItem stopSelectionItem = curMenu.findItem(R.id.option_stop_selection);
+            if (selectedDates.size() == 0) { //if something is selected
+                selecting = false;
+
+                //disable options of menu
                 clearItem.setEnabled(false);
                 planItem.setEnabled(false);
                 groceryListItem.setEnabled(false);
+
+                stopSelectionItem.setEnabled(false);
+                stopSelectionItem.setVisible(false);
+
+                //change action bar title
+                ((Activity) mContext).setTitle("Planning");
             } else {
+                selecting = true;
+
+                //enable options of menu
                 clearItem.setEnabled(true);
                 planItem.setEnabled(true);
                 groceryListItem.setEnabled(true);
+
+                stopSelectionItem.setEnabled(true);
+                stopSelectionItem.setVisible(true);
+
+                //change action bar title
+                ((Activity) mContext).setTitle(selectedDates.size() + " selected");
             }
         }
     }

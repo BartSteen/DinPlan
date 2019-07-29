@@ -102,6 +102,7 @@ public class activity_meal_list extends AppCompatActivity {
 
         MenuItem searchItem = menu.findItem(R.id.option_search);
 
+        //searchview settings
         curSearchView = (SearchView) searchItem.getActionView();
         curSearchView.setFocusable(false);
         curSearchView.setQueryHint("Search");
@@ -144,6 +145,7 @@ public class activity_meal_list extends AppCompatActivity {
         if (curSearchView.isIconified()) {
             super.onBackPressed();
         } else {
+            curSearchView.setQuery("", false);
             curSearchView.setIconified(true);
         }
     }

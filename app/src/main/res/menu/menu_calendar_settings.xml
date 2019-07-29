@@ -10,4 +10,12 @@
     <item
         android:id="@+id/option_grocery_list"
         android:title="Create Grocery List" />
+    <item
+        android:id="@+id/option_stop_selection"
+        android:checkable="true"
+        android:enabled="false"
+        android:title="Stop selection"
+        android:icon="@drawable/ic_cross"
+        android:visible="false"
+        app:showAsAction="ifRoom"></item>
 </menu>

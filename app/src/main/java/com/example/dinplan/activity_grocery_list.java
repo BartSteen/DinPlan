@@ -66,8 +66,7 @@ public class activity_grocery_list extends AppCompatActivity {
                     //if name and unit are the same add the amount
                     if (ingredientList.get(k).getName().toLowerCase().equals(curIng.getName().toLowerCase())) {
                         if (ingredientList.get(k).getUnit().toLowerCase().equals(curIng.getUnit().toLowerCase())) {
-                            //SOMETHING GOES WRONG HERE*
-                            // ingredientList.get(k).setAmount(ingredientList.get(k).getAmount() + curIng.getAmount());
+                            //add up the two amounts and put it in a new ingredient, replacing the old ingredient in the list
                             ingredientList.set(k, new Ingredient(curIng.getName(), curIng.getAmount() + ingredientList.get(k).getAmount(), curIng.getUnit()));
                             //go to next ingredient
                             continue ingredientLoop;

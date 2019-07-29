@@ -123,6 +123,9 @@ public class activity_weekly_calendar extends AppCompatActivity {
                 grocIntent.putExtra("dateList", selectedDaysList);
                 startActivityForResult(grocIntent, 1);
                 return true;
+            case R.id.option_stop_selection:
+                stopSelection();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -147,6 +150,32 @@ public class activity_weekly_calendar extends AppCompatActivity {
         return true;
     }
 
+    //override back press of android
+    @Override
+    public void onBackPressed() {
+        RecyclerView recyclerView = findViewById(R.id.recycler_weekly);
+        RecyclerViewAdapterWeekly adapterWeekly = (RecyclerViewAdapterWeekly) recyclerView.getAdapter();
+        //if selecting: cancel selection, else normal behaviour
+        if (adapterWeekly.getSelecting()) {
+            stopSelection();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    //stops the selection of plans
+    private void stopSelection() {
+        //get recycler view stuff
+        RecyclerView recyclerView = findViewById(R.id.recycler_weekly);
+        RecyclerViewAdapterWeekly adapterWeekly = (RecyclerViewAdapterWeekly) recyclerView.getAdapter();
+        ArrayList<String> selectedDaysList = adapterWeekly.getSelectedDates();
+
+        //clear the list, recolour the plans and set menu properly
+        selectedDaysList.clear();
+        adapterWeekly.notifyDataSetChanged();
+        adapterWeekly.setMenuEnables();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -155,12 +184,8 @@ public class activity_weekly_calendar extends AppCompatActivity {
             if(resultCode == Activity.RESULT_OK){
                 //load plan on returning from selecting a meal
                 dataCont.loadPlan();
-                //  initRecyclerView();
 
-                RecyclerView recyclerView = findViewById(R.id.recycler_weekly);
-                RecyclerViewAdapterWeekly adapterWeekly = (RecyclerViewAdapterWeekly) recyclerView.getAdapter();
-                adapterWeekly.notifyDataSetChanged();
-
+                stopSelection();
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 //Write your code if there's no result
