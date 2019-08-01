@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -31,6 +32,7 @@ public class RecyclerViewAdapterWeekly extends RecyclerView.Adapter<RecyclerView
     Calendar curCal;
     private String todayDateString;
     private ArrayList<String> selectedDates = new ArrayList<>();
+    private String[] currentDates = new String[7];
     private Menu curMenu;
     private boolean selecting = false;
 
@@ -87,6 +89,7 @@ public class RecyclerViewAdapterWeekly extends RecyclerView.Adapter<RecyclerView
 
         //set the texts
         final String dateString = String.format("%d-%d-%d", tempCal.get(Calendar.DAY_OF_MONTH), tempCal.get(Calendar.MONTH) + 1, tempCal.get(Calendar.YEAR));
+        currentDates[position] = dateString;
         holder.dayDate.setText(dayName + " " + dateString);
         if (dataCont.findPlan(dateString) != null) {
             holder.nameMeal.setText(dataCont.findPlan(dateString).getPlannedMeal().getName());
@@ -134,6 +137,12 @@ public class RecyclerViewAdapterWeekly extends RecyclerView.Adapter<RecyclerView
                 return true;
             }
         });
+
+        //update menu when all days have been updated
+        if (position == getItemCount() - 1) {
+            setMenuEnables();
+        }
+
     }
 
     //returns the amount of items
@@ -178,7 +187,7 @@ public class RecyclerViewAdapterWeekly extends RecyclerView.Adapter<RecyclerView
     }
 
     //deals with selection of a plan
-    private void handleSelection(String dateString) {
+    public void handleSelection(String dateString) {
         if (dateInList(dateString)) {
             removeFromList(dateString);
         } else {
@@ -197,14 +206,23 @@ public class RecyclerViewAdapterWeekly extends RecyclerView.Adapter<RecyclerView
         return selecting;
     }
 
+    public String[] getCurrentDates() {
+        return currentDates;
+    }
+
     //sets the action bar stuff properly based on current status
     public void setMenuEnables() {
         if (curMenu != null) {
+            //get all items
             MenuItem clearItem = curMenu.findItem(R.id.option_clear_selected);
             MenuItem planItem = curMenu.findItem(R.id.option_plan_selected);
             MenuItem groceryListItem = curMenu.findItem(R.id.option_grocery_list);
 
             MenuItem stopSelectionItem = curMenu.findItem(R.id.option_stop_selection);
+
+            MenuItem selectAllItem = curMenu.findItem(R.id.option_check_box);
+            CheckBox selectAllBox = (CheckBox) selectAllItem.getActionView();
+
             if (selectedDates.size() == 0) { //if something is selected
                 selecting = false;
 
@@ -215,6 +233,8 @@ public class RecyclerViewAdapterWeekly extends RecyclerView.Adapter<RecyclerView
 
                 stopSelectionItem.setEnabled(false);
                 stopSelectionItem.setVisible(false);
+                selectAllItem.setEnabled(false);
+                selectAllItem.setVisible(false);
 
                 //change action bar title
                 ((Activity) mContext).setTitle("Planning");
@@ -228,6 +248,25 @@ public class RecyclerViewAdapterWeekly extends RecyclerView.Adapter<RecyclerView
 
                 stopSelectionItem.setEnabled(true);
                 stopSelectionItem.setVisible(true);
+                selectAllItem.setEnabled(true);
+                selectAllItem.setVisible(true);
+
+                //deal checkbox state
+                int count = 0;
+                for (int i = 0; i < currentDates.length; i++) {
+                    if (dateInList(currentDates[i])) {
+                        count++;
+                    }
+                }
+
+                if (count == 7) {
+                    selectAllBox.setChecked(true);
+                    selectAllItem.setTitle("Deselect all");
+                } else {
+                    selectAllBox.setChecked(false);
+                    selectAllItem.setTitle("Select all");
+                }
+
 
                 //change action bar title
                 ((Activity) mContext).setTitle(selectedDates.size() + " selected");

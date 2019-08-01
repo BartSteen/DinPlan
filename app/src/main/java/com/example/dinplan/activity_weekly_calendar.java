@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -115,7 +116,9 @@ public class activity_weekly_calendar extends AppCompatActivity {
                     dataCont.removePlan(selectedDaysList.get(i));
                 }
                 dataCont.savePlan();
-                initRecyclerView();
+
+                //reset
+                stopSelection();
                 return true;
             case R.id.option_grocery_list:
                 //go to grocery list activity
@@ -142,6 +145,20 @@ public class activity_weekly_calendar extends AppCompatActivity {
         clearItem.setEnabled(false);
         planItem.setEnabled(false);
         groceryListItem.setEnabled(false);
+
+        //checkbox stuff
+        MenuItem boxItem = menu.findItem(R.id.option_check_box);
+        final CheckBox menuBox = (CheckBox) boxItem.getActionView();
+        menuBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (menuBox.isChecked()) {
+                    selectAll();
+                } else {
+                    deselectAll();
+                }
+            }
+        });
 
         //pass menu on to adapter
         RecyclerView recyclerView = findViewById(R.id.recycler_weekly);
@@ -174,6 +191,30 @@ public class activity_weekly_calendar extends AppCompatActivity {
         selectedDaysList.clear();
         adapterWeekly.notifyDataSetChanged();
         adapterWeekly.setMenuEnables();
+    }
+
+    //selects all currently shown dates
+    private void selectAll() {
+        RecyclerView recyclerView = findViewById(R.id.recycler_weekly);
+        RecyclerViewAdapterWeekly adapterWeekly = (RecyclerViewAdapterWeekly) recyclerView.getAdapter();
+        for (int i = 0; i < adapterWeekly.getCurrentDates().length; i++) {
+            //if it is not selected already select it
+            if (!adapterWeekly.dateInList(adapterWeekly.getCurrentDates()[i])) {
+                adapterWeekly.handleSelection(adapterWeekly.getCurrentDates()[i]);
+            }
+        }
+    }
+
+    //deselects all currently shown dates
+    private void deselectAll() {
+        RecyclerView recyclerView = findViewById(R.id.recycler_weekly);
+        RecyclerViewAdapterWeekly adapterWeekly = (RecyclerViewAdapterWeekly) recyclerView.getAdapter();
+        for (int i = 0; i < adapterWeekly.getCurrentDates().length; i++) {
+            //if it is selected deselect it
+            if (adapterWeekly.dateInList(adapterWeekly.getCurrentDates()[i])) {
+                adapterWeekly.handleSelection(adapterWeekly.getCurrentDates()[i]);
+            }
+        }
     }
 
     @Override
