@@ -87,10 +87,14 @@ public class RecyclerViewAdapterWeekly extends RecyclerView.Adapter<RecyclerView
         SimpleDateFormat formatter = new SimpleDateFormat("EEEE");
         String dayName = formatter.format(tempCal.getTime());
 
+        //Get month name
+        SimpleDateFormat monthFormatter = new SimpleDateFormat("MMM");
+        String monthName = monthFormatter.format(tempCal.getTime());
+
         //set the texts
         final String dateString = String.format("%d-%d-%d", tempCal.get(Calendar.DAY_OF_MONTH), tempCal.get(Calendar.MONTH) + 1, tempCal.get(Calendar.YEAR));
         currentDates[position] = dateString;
-        holder.dayDate.setText(dayName + " " + dateString);
+        holder.dayDate.setText(dayName + " " + tempCal.get(Calendar.DAY_OF_MONTH) + " " + monthName);
         if (dataCont.findPlan(dateString) != null) {
             holder.nameMeal.setText(dataCont.findPlan(dateString).getPlannedMeal().getName());
         } else {
@@ -108,8 +112,8 @@ public class RecyclerViewAdapterWeekly extends RecyclerView.Adapter<RecyclerView
 
         //selection image visibility
         if (dateInList(dateString)) {
-            holder.dayDate.setTextColor(Color.GREEN);
-            holder.nameMeal.setTextColor(Color.GREEN);
+            holder.dayDate.setTextColor(mContext.getResources().getColor(R.color.colorAccent));
+            holder.nameMeal.setTextColor(mContext.getResources().getColor(R.color.colorAccent));
         }
 
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
