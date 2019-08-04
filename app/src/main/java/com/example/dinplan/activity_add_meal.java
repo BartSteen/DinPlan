@@ -119,6 +119,13 @@ public class activity_add_meal extends AppCompatActivity {
                 returnIntent.putExtra("oldId", currentMeal.getId());
                 setResult(Activity.RESULT_OK, returnIntent);
                 finish();
+            case R.id.option_add_recipe:
+                Intent myIntent = new Intent(getBaseContext(), activity_recipe.class);
+                //add recipe if it exists
+                if (currentMeal.getRecipe() != null) {
+                    myIntent.putExtra("Recipe", currentMeal.getRecipe());
+                }
+                startActivityForResult(myIntent, 1);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -146,6 +153,8 @@ public class activity_add_meal extends AppCompatActivity {
                     Ingredient newIngredient = (Ingredient) data.getSerializableExtra("Ingredient");
                     currentMeal.addIngredient(newIngredient);
                 }
+
+                //DEAL WITH RECIPE ***
 
                 RecyclerView recyclerView = findViewById(R.id.ingredientView);
                 recyclerView.getAdapter().notifyDataSetChanged();

@@ -98,7 +98,7 @@ public class RecyclerViewAdapterWeekly extends RecyclerView.Adapter<RecyclerView
         if (dataCont.findPlan(dateString) != null) {
             holder.nameMeal.setText(dataCont.findPlan(dateString).getPlannedMeal().getName());
         } else {
-            holder.nameMeal.setText("Null");
+            holder.nameMeal.setText("-");
         }
 
         //current day red

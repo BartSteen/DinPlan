@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="?android:attr/selectableItemBackground"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="15dp"
+    android:id="@+id/parent_layout_recipe">
+
+    <TextView
+        android:id="@+id/txt_stepCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="step"
+        android:textColor="@color/colorPrimaryText"
+        android:textSize="19sp" />
+
+    <TextView
+        android:id="@+id/txt_recipe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textColor="@color/colorPrimaryText"
+        android:textSize="19sp"
+        android:layout_toRightOf="@+id/txt_stepCount"
+        android:layout_marginLeft="20dp" />
+
+    <EditText
+        android:id="@+id/etxt_recipe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_toRightOf="@+id/txt_stepCount"
+        android:hint="Step"
+        android:textColor="@color/colorSecondaryText"
+        android:textSize="19sp"
+        android:visibility="invisible" />
+
+</RelativeLayout>

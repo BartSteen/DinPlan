@@ -10,6 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".activity_recipe"
+            android:label="Recipe"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustNothing" />
+        <activity
             android:name=".activity_grocery_list"
             android:label="Grocery List"
             android:screenOrientation="portrait"
@@ -26,9 +32,9 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".activity_meal_list"
+            android:label="Meal List"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"
-            android:label="Meal List">
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>

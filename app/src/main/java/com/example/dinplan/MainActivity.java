@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //button for going to the calendar
+        /*//button for going to the calendar
         Button btnCalendar = findViewById(R.id.btn_calendar);
         btnCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent myIntent = new Intent(getBaseContext(), activity_calendar.class);
                 startActivity(myIntent);
             }
-        });
+        }); */
 
         //button for going to the calendar
         Button btnWeekCal = findViewById(R.id.btn_weekly_calendar);

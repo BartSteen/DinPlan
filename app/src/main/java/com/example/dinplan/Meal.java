@@ -9,7 +9,7 @@ public class Meal implements Serializable {
 
     private String name;
     private ArrayList<Ingredient> ingredients = new ArrayList<>();
-    private ArrayList<String> recipe = new ArrayList<>();
+    private Recipe recipe;
     private String id;
 
 
@@ -17,7 +17,7 @@ public class Meal implements Serializable {
         id = UUID.randomUUID().toString();
     }
 
-    public Meal(String name, ArrayList<Ingredient> ingredients, ArrayList<String> recipe) {
+    public Meal(String name, ArrayList<Ingredient> ingredients, Recipe recipe) {
         this.name = name;
         this.ingredients = ingredients;
         this.recipe = recipe;
@@ -30,7 +30,7 @@ public class Meal implements Serializable {
         this.id = id;
     }
 
-    public Meal(String name, ArrayList<Ingredient> ingredients, ArrayList<String> recipe, String id) {
+    public Meal(String name, ArrayList<Ingredient> ingredients, Recipe recipe, String id) {
         this.name = name;
         this.ingredients = ingredients;
         this.recipe = recipe;
@@ -78,7 +78,7 @@ public class Meal implements Serializable {
         return id;
     }
 
-    public ArrayList<String> getRecipe() {
+    public Recipe getRecipe() {
         return recipe;
     }
 
