@@ -10,8 +10,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-
-import java.util.ArrayList;
+import android.widget.EditText;
 
 public class activity_recipe extends AppCompatActivity {
 
@@ -24,10 +23,15 @@ public class activity_recipe extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        final EditText etxtTime = findViewById(R.id.etxt_recipe_time);
+
         //check if there already is a recipe
         if (getIntent().getExtras() != null) {
             if (getIntent().getExtras().containsKey("Recipe")) {
                 recipe = (Recipe) getIntent().getExtras().get("Recipe");
+                if (recipe.getPrepTimeMin() != -1) {
+                    etxtTime.setText(Integer.toString(recipe.getPrepTimeMin()));
+                }
             }
         } else {
             recipe = new Recipe();
@@ -54,6 +58,14 @@ public class activity_recipe extends AppCompatActivity {
         btnSaveRec.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //update prep time
+
+                if (!etxtTime.getText().toString().equals("")) {
+                    recipe.setPrepTimeMin(Integer.parseInt(etxtTime.getText().toString()));
+                } else {
+                    recipe.setPrepTimeMin(-1);
+                }
+
                 //return with recipe
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("Recipe", recipe);

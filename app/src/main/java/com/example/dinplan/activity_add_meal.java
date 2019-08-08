@@ -101,7 +101,7 @@ public class activity_add_meal extends AppCompatActivity {
     //initialize recycler view
     private void initRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.ingredientView);
-        RecyclerViewAdapterIngredient adapter = new RecyclerViewAdapterIngredient(currentMeal.getIngredients(), this);//(mNames, mAmounts, mUnits, this);
+        RecyclerViewAdapterIngredient adapter = new RecyclerViewAdapterIngredient(currentMeal.getIngredients(), this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -149,12 +149,16 @@ public class activity_add_meal extends AppCompatActivity {
                     currentMeal.removeIngredient((String) data.getExtras().get("oldName"));
                 }
                 //check if this is adding an ingredient (rather than delete)
-                if(data.getExtras().containsKey("Ingredient")) {
+                if (data.getExtras().containsKey("Ingredient")) {
                     Ingredient newIngredient = (Ingredient) data.getSerializableExtra("Ingredient");
                     currentMeal.addIngredient(newIngredient);
                 }
 
-                //DEAL WITH RECIPE ***
+                //if it contains a recipe add it to the meal
+                if (data.getExtras().containsKey("Recipe")) {
+                    Recipe tempRec = (Recipe) data.getExtras().get("Recipe");
+                    currentMeal.setRecipe(tempRec);
+                }
 
                 RecyclerView recyclerView = findViewById(R.id.ingredientView);
                 recyclerView.getAdapter().notifyDataSetChanged();

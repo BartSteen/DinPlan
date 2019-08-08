@@ -30,4 +30,8 @@ public class Recipe implements Serializable {
     public int getPrepTimeMin() {
         return prepTimeMin;
     }
+
+    public void setPrepTimeMin(int prepTime) {
+        prepTimeMin = prepTime;
+    }
 }

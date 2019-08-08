@@ -82,4 +82,8 @@ public class Meal implements Serializable {
         return recipe;
     }
 
+    public void setRecipe(Recipe tempRec) {
+        this.recipe = tempRec;
+    }
+
 }

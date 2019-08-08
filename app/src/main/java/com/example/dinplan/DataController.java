@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -32,12 +33,23 @@ public class DataController {
         for (Meal mealCur : mealArrayList) {
             fileContent += mealCur.getName() + "\n";
             fileContent += mealCur.getId() + "\n";
+
             //save all ingredients data seperated by a ; and all ingredients seperated by |
             for (Ingredient ingCur : mealCur.getIngredients()) {
                 fileContent += ingCur.getName() + ";" + ingCur.getAmount() + ";" + ingCur.getUnit() + "|";
             }
             fileContent += "\n";
-            //Possible recipe attachment
+
+            //recipe data (prep time and steps seperated by |) (steps seperated by ;)
+            if (mealCur.getRecipe() == null) {
+                fileContent += "\n";
+            } else {
+                fileContent += mealCur.getRecipe().getPrepTimeMin() + "|";
+                for (int i = 0; i < mealCur.getRecipe().getRecipeList().size(); i++) {
+                    fileContent += mealCur.getRecipe().getRecipeList().get(i) + ";";
+                }
+                fileContent += "\n";
+            }
         }
 
         //write the fileContent to a file in internal storage
@@ -96,9 +108,38 @@ public class DataController {
                     }
                 }
 
-                //add the meal to the list
-                mealArrayList.add(new Meal(mealName, ingList,  mealId));
+                //load recipe
+                String recipeString = scn.nextLine();
+                System.out.println("recipe: " + recipeString);
+                String[] timeStepSplit = recipeString.split("\\|", -1);
+                if (timeStepSplit.length > 1) { //if it has a recipe
+                    //get preperation time
+                    int recipeTime = Integer.parseInt(timeStepSplit[0]);
+                    System.out.println(mealName + " has a recipe");
+
+                    //get steps
+                    ArrayList<String> tempStepList = new ArrayList<>();
+
+                    String[] stepArray = timeStepSplit[1].split(";");
+
+                    for (int i = 0; i < stepArray.length; i++) {
+                        if (!stepArray[i].equals("")) {
+                            tempStepList.add(stepArray[i]);
+                        }
+                    }
+
+                    Recipe tempRec = new Recipe(tempStepList, recipeTime);
+
+                    //add the meal to the list
+                    mealArrayList.add(new Meal(mealName, ingList, tempRec, mealId));
+                } else {
+                    //add the meal to the list
+                    mealArrayList.add(new Meal(mealName, ingList, mealId));
+                }
+
+
             }
+            inputStream.close();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -157,7 +198,7 @@ public class DataController {
                 }
             }
 
-
+            inputStream.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
