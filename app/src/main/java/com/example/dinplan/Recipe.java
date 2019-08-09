@@ -11,6 +11,7 @@ public class Recipe implements Serializable {
 
     public Recipe() {
         //hold
+        prepTimeMin = -1;
     }
 
     //constructor

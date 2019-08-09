@@ -80,6 +80,11 @@ public class activity_add_meal extends AppCompatActivity {
                 if (!mealNameEtxt.getText().toString().equals("")) {
                     currentMeal.setName(mealNameEtxt.getText().toString());
 
+                    //add empty recipe if there is none yet
+                    if (currentMeal.getRecipe() == null) {
+                        currentMeal.setRecipe(new Recipe());
+                    }
+
                     Intent returnIntent = new Intent();
                     returnIntent.putExtra("Meal", currentMeal);
 
@@ -112,13 +117,13 @@ public class activity_add_meal extends AppCompatActivity {
             case android.R.id.home:
                 finish();
                 return true;
-
             case R.id.option_delete:
                 //delete by adding "oldId" as an extra
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("oldId", currentMeal.getId());
                 setResult(Activity.RESULT_OK, returnIntent);
                 finish();
+                return true;
             case R.id.option_add_recipe:
                 Intent myIntent = new Intent(getBaseContext(), activity_recipe.class);
                 //add recipe if it exists
@@ -126,6 +131,7 @@ public class activity_add_meal extends AppCompatActivity {
                     myIntent.putExtra("Recipe", currentMeal.getRecipe());
                 }
                 startActivityForResult(myIntent, 1);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }

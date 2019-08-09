@@ -112,30 +112,24 @@ public class DataController {
                 String recipeString = scn.nextLine();
                 System.out.println("recipe: " + recipeString);
                 String[] timeStepSplit = recipeString.split("\\|", -1);
-                if (timeStepSplit.length > 1) { //if it has a recipe
-                    //get preperation time
-                    int recipeTime = Integer.parseInt(timeStepSplit[0]);
-                    System.out.println(mealName + " has a recipe");
 
-                    //get steps
-                    ArrayList<String> tempStepList = new ArrayList<>();
+                //get preperation time
+                int recipeTime = Integer.parseInt(timeStepSplit[0]);
 
-                    String[] stepArray = timeStepSplit[1].split(";");
+                //get steps
+                ArrayList<String> tempStepList = new ArrayList<>();
 
-                    for (int i = 0; i < stepArray.length; i++) {
-                        if (!stepArray[i].equals("")) {
-                            tempStepList.add(stepArray[i]);
-                        }
+                String[] stepArray = timeStepSplit[1].split(";");
+                for (int i = 0; i < stepArray.length; i++) {
+                    if (!stepArray[i].equals("")) {
+                        tempStepList.add(stepArray[i]);
                     }
-
-                    Recipe tempRec = new Recipe(tempStepList, recipeTime);
-
-                    //add the meal to the list
-                    mealArrayList.add(new Meal(mealName, ingList, tempRec, mealId));
-                } else {
-                    //add the meal to the list
-                    mealArrayList.add(new Meal(mealName, ingList, mealId));
                 }
+
+                Recipe tempRec = new Recipe(tempStepList, recipeTime);
+
+                //add the meal to the list
+                mealArrayList.add(new Meal(mealName, ingList, tempRec, mealId));
 
 
             }
