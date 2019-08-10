@@ -31,7 +31,7 @@ public class activity_add_meal extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         final EditText mealNameEtxt = findViewById(R.id.etxt_mealName);
-        Button btnDelMeal = findViewById(R.id.btn_del_meal);
+        //Button btnDelMeal = findViewById(R.id.btn_del_meal);
         TextView upperTxt = findViewById(R.id.txt_meal_main);
 
         //check if this is an edit
@@ -42,7 +42,7 @@ public class activity_add_meal extends AppCompatActivity {
             edit = true;
             upperTxt.setText("Edit Meal");
 
-            //set action for delete button
+           /* //set action for delete button
             btnDelMeal.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -52,11 +52,11 @@ public class activity_add_meal extends AppCompatActivity {
                     setResult(Activity.RESULT_OK, returnIntent);
                     finish();
                 }
-            });
+            }); */
         } else {
             currentMeal = new Meal();
             //get rid of delete button
-            btnDelMeal.setVisibility(View.GONE);
+            // btnDelMeal.setVisibility(View.GONE);
         }
 
         initRecyclerView();

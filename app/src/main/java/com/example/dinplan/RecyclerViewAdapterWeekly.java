@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -103,17 +104,24 @@ public class RecyclerViewAdapterWeekly extends RecyclerView.Adapter<RecyclerView
 
         //current day red
         if (dateString.equals(todayDateString)) {
-            holder.dayDate.setTextColor(Color.RED);
-            holder.nameMeal.setTextColor(Color.RED);
+            //  holder.dayDate.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryLight));
+            //  holder.nameMeal.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryLight));
+            holder.dayDate.setTypeface(null, Typeface.BOLD);
+            holder.nameMeal.setTypeface(null, Typeface.BOLD);
         } else {
-            holder.dayDate.setTextColor(Color.BLACK);
-            holder.nameMeal.setTextColor(Color.BLACK);
+            //  holder.dayDate.setTextColor(mContext.getResources().getColor(R.color.colorLightText));
+            //   holder.nameMeal.setTextColor(mContext.getResources().getColor(R.color.colorLightText));
+            holder.dayDate.setTypeface(null, Typeface.NORMAL);
+            holder.nameMeal.setTypeface(null, Typeface.NORMAL);
         }
 
         //selection image visibility
         if (dateInList(dateString)) {
             holder.dayDate.setTextColor(mContext.getResources().getColor(R.color.colorAccent));
             holder.nameMeal.setTextColor(mContext.getResources().getColor(R.color.colorAccent));
+        } else {
+            holder.dayDate.setTextColor(mContext.getResources().getColor(R.color.colorLightText));
+            holder.nameMeal.setTextColor(mContext.getResources().getColor(R.color.colorLightText));
         }
 
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {

@@ -57,7 +57,8 @@
             android:windowSoftInputMode="adjustNothing" />
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:label="Demo">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

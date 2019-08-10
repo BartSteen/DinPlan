@@ -58,8 +58,8 @@ public class activity_recipe extends AppCompatActivity {
         btnSaveRec.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //update prep time
 
+                //update prep time
                 if (!etxtTime.getText().toString().equals("")) {
                     recipe.setPrepTimeMin(Integer.parseInt(etxtTime.getText().toString()));
                 } else {
