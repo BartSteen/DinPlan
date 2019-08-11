@@ -18,7 +18,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         //button for going directly to the meal list
         Button btnMealList = findViewById(R.id.btn_mealList);
         btnMealList.setOnClickListener(new View.OnClickListener() {

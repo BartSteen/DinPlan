@@ -8,6 +8,20 @@
     android:background="@color/colorBackground"
     tools:context=".activity_weekly_calendar">
 
+    <Button
+        android:id="@+id/btn_weekly_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@color/colorAccent"
+        android:text="Left"
+        android:textColor="@color/colorLightText"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recycler_weekly" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_weekly"
         android:layout_width="358dp"
@@ -37,20 +51,6 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/btn_weekly_left"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:background="@color/colorAccent"
-        android:text="Left"
-        android:textColor="@color/colorLightText"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recycler_weekly" />
-
-    <Button
         android:id="@+id/btn_weekly_right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -63,4 +63,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recycler_weekly" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

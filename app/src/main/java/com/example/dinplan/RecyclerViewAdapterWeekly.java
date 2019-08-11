@@ -108,11 +108,15 @@ public class RecyclerViewAdapterWeekly extends RecyclerView.Adapter<RecyclerView
             //  holder.nameMeal.setTextColor(mContext.getResources().getColor(R.color.colorPrimaryLight));
             holder.dayDate.setTypeface(null, Typeface.BOLD);
             holder.nameMeal.setTypeface(null, Typeface.BOLD);
+            holder.dayDate.setTextSize(22);
+            holder.dayDate.setTextSize(20);
         } else {
             //  holder.dayDate.setTextColor(mContext.getResources().getColor(R.color.colorLightText));
             //   holder.nameMeal.setTextColor(mContext.getResources().getColor(R.color.colorLightText));
             holder.dayDate.setTypeface(null, Typeface.NORMAL);
             holder.nameMeal.setTypeface(null, Typeface.NORMAL);
+            holder.dayDate.setTextSize(19);
+            holder.nameMeal.setTextSize(17);
         }
 
         //selection image visibility

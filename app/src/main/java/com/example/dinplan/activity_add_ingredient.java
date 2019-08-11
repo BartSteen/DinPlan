@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -27,7 +29,7 @@ public class activity_add_ingredient extends AppCompatActivity {
         final EditText nameText = findViewById(R.id.etxt_IngName);
         final EditText amountText = findViewById(R.id.etxt_amount);
         final EditText unitText = findViewById(R.id.etxt_unit);
-        Button btnDel = findViewById(R.id.btn_delIng);
+        // Button btnDel = findViewById(R.id.btn_delIng);
         TextView upperTxt = findViewById(R.id.txt_ing_main);
 
         //check if this is an edit
@@ -40,7 +42,7 @@ public class activity_add_ingredient extends AppCompatActivity {
 
             upperTxt.setText("Edit ingredient");
 
-            btnDel.setOnClickListener(new View.OnClickListener() {
+        /*    btnDel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     //delete by passing oldName data in intent
@@ -49,10 +51,10 @@ public class activity_add_ingredient extends AppCompatActivity {
                     setResult(Activity.RESULT_OK, returnIntent);
                     finish();
                 }
-            });
+            }); */
         } else {
             currentIngredient = new Ingredient();
-            btnDel.setVisibility(View.GONE);
+            //  btnDel.setVisibility(View.GONE);
         }
 
         Button btnAddIng = findViewById(R.id.btn_addIng);
@@ -87,7 +89,21 @@ public class activity_add_ingredient extends AppCompatActivity {
             case android.R.id.home:
                 finish();
                 return true;
+            case R.id.option_delete_ing:
+                //delete by passing oldName data in intent
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("oldName", oldName);
+                setResult(Activity.RESULT_OK, returnIntent);
+                finish();
+                return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_ingredient_settings, menu);
+        return true;
     }
 }
