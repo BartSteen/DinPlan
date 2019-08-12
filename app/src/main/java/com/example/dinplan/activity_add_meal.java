@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -106,9 +107,17 @@ public class activity_add_meal extends AppCompatActivity {
     //initialize recycler view
     private void initRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.ingredientView);
+
+        //adds a divider between items
+        DividerItemDecoration itemDecor = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        itemDecor.setDrawable(getDrawable(R.drawable.ic_divider));
+        recyclerView.addItemDecoration(itemDecor);
+
         RecyclerViewAdapterIngredient adapter = new RecyclerViewAdapterIngredient(currentMeal.getIngredients(), this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+
     }
 
     @Override

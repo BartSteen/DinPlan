@@ -1,6 +1,7 @@
 package com.example.dinplan;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -71,9 +72,16 @@ public class activity_meal_list extends AppCompatActivity {
     //initialize and sets up the recycler view
     private void initRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.recycler_meal_list);
+
+        //adds a divider between items
+        DividerItemDecoration itemDecor = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        itemDecor.setDrawable(getDrawable(R.drawable.ic_divider));
+        recyclerView.addItemDecoration(itemDecor);
+
         RecyclerViewAdapterMeal adapter = new RecyclerViewAdapterMeal(this, dateList, dataCont);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
     }
 
     //same but with a list of meals that should be shown
