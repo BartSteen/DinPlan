@@ -49,7 +49,7 @@ public class activity_meal_list extends AppCompatActivity {
                 if (dateList.size() == 1) {
                     topText.setText("Plan for: " + dateList.get(0));
                 } else {
-                    topText.setText("Plan for " + dateList.size() + " meals");
+                    topText.setText("Plan for " + dateList.size() + " days");
                 }
                 //hide add meal button
                 btnAddMeal.setVisibility(View.GONE);

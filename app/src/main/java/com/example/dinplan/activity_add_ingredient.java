@@ -9,8 +9,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +35,17 @@ public class activity_add_ingredient extends AppCompatActivity {
         // Button btnDel = findViewById(R.id.btn_delIng);
         TextView upperTxt = findViewById(R.id.txt_ing_main);
 
+        //spinner stuff
+        Spinner spinner = findViewById(R.id.spn_unit);
+
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.unitStringArray, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
+
         //check if this is an edit
         if (getIntent().getExtras() != null) {
             currentIngredient = (Ingredient) getIntent().getExtras().get("Ingredient");
@@ -39,6 +53,7 @@ public class activity_add_ingredient extends AppCompatActivity {
             amountText.setText(Float.toString(currentIngredient.getAmount()));
             unitText.setText(currentIngredient.getUnit());
             oldName = currentIngredient.getName();
+            setSpinnerSelection(spinner, currentIngredient.getUnit());
 
             upperTxt.setText("Edit ingredient");
 
@@ -57,6 +72,22 @@ public class activity_add_ingredient extends AppCompatActivity {
             //  btnDel.setVisibility(View.GONE);
         }
 
+
+        //spinner listener
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                currentIngredient.setUnit((String) adapterView.getItemAtPosition(i));
+                //FIND A BETTER WAY TO CHANGE COLOUR **
+                ((TextView) adapterView.getChildAt(0)).setTextColor(getResources().getColor(R.color.colorLightText));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
         Button btnAddIng = findViewById(R.id.btn_addIng);
         btnAddIng.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,7 +99,7 @@ public class activity_add_ingredient extends AppCompatActivity {
                     Intent returnIntent = new Intent();
                     currentIngredient.setName(nameText.getText().toString());
                     currentIngredient.setAmount(Float.parseFloat(amountText.getText().toString()));
-                    currentIngredient.setUnit(unitText.getText().toString());
+                    // currentIngredient.setUnit(unitText.getText().toString());
                     returnIntent.putExtra("Ingredient", currentIngredient);
                     //check if this was an edit
                     if (oldName != null) {
@@ -82,6 +113,16 @@ public class activity_add_ingredient extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    //sets the spinner value to the string if it is in the list
+    public void setSpinnerSelection(Spinner spin, String str) {
+        for (int i = 0; i < spin.getCount(); i++) {
+            if (spin.getItemAtPosition(i).equals(str)) {
+                spin.setSelection(i);
+                return;
+            }
+        }
     }
 
     public boolean onOptionsItemSelected(MenuItem item){

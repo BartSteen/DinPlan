@@ -1,11 +1,17 @@
 package com.example.dinplan;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -83,6 +89,12 @@ public class activity_grocery_list extends AppCompatActivity {
 
     private void initRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.recycler_grocery_list);
+
+        //adds a divider between items
+        DividerItemDecoration itemDecor = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        itemDecor.setDrawable(getDrawable(R.drawable.ic_divider));
+        recyclerView.addItemDecoration(itemDecor);
+
         RecyclerViewAdapterIngredient adapter = new RecyclerViewAdapterIngredient(ingredientList, this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -95,7 +107,35 @@ public class activity_grocery_list extends AppCompatActivity {
             case android.R.id.home:
                 finish();
                 return true;
+            case R.id.option_share_grocery:
+                //see if there is anything to share
+                if (ingredientList.size() == 0) {
+                    Toast.makeText(this, "List is empty", Toast.LENGTH_SHORT).show();
+                } else {
+                    //get text to share
+                    String shareText = "";
+                    for (int i = 0; i < ingredientList.size(); i++) {
+                        Ingredient tempIng = ingredientList.get(i);
+                        shareText += "-" + tempIng.getName() + ": " + tempIng.getAmount() + " " + tempIng.getUnit() + "\n";
+                    }
+
+                    //share stuff
+                    Intent sendIntent = new Intent();
+                    sendIntent.setAction(Intent.ACTION_SEND);
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, shareText);
+                    sendIntent.setType("text/plain");
+                    startActivity(sendIntent);
+                }
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_share_grocery, menu);
+
+        return true;
+    }
+
 }

@@ -2,4 +2,13 @@
     <string name="app_name">Dinner Planner</string>
     <string name="title_activity_second">activity_second</string>
     <string name="title_activity_meal_list">activity_meal_list</string>
+    <string-array name="unitStringArray">
+        <item>mg</item>
+        <item>g</item>
+        <item>kg</item>
+        <item>mL</item>
+        <item>L</item>
+        <item>pieces</item>
+        <item>custom</item>
+    </string-array>
 </resources>
