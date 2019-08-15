@@ -21,6 +21,7 @@ public class activity_add_ingredient extends AppCompatActivity {
 
     Ingredient currentIngredient;
     String oldName;
+    String customString = "custom";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +37,7 @@ public class activity_add_ingredient extends AppCompatActivity {
         TextView upperTxt = findViewById(R.id.txt_ing_main);
 
         //spinner stuff
-        Spinner spinner = findViewById(R.id.spn_unit);
+        final Spinner spinner = findViewById(R.id.spn_unit);
 
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -51,9 +52,15 @@ public class activity_add_ingredient extends AppCompatActivity {
             currentIngredient = (Ingredient) getIntent().getExtras().get("Ingredient");
             nameText.setText(currentIngredient.getName());
             amountText.setText(Float.toString(currentIngredient.getAmount()));
-            unitText.setText(currentIngredient.getUnit());
             oldName = currentIngredient.getName();
             setSpinnerSelection(spinner, currentIngredient.getUnit());
+
+            //if we have custom set etxt
+            if (spinner.getSelectedItem().equals(customString)) {
+                unitText.setText(currentIngredient.getUnit());
+            } else {
+                unitText.setVisibility(View.GONE);
+            }
 
             upperTxt.setText("Edit ingredient");
 
@@ -80,6 +87,13 @@ public class activity_add_ingredient extends AppCompatActivity {
                 currentIngredient.setUnit((String) adapterView.getItemAtPosition(i));
                 //FIND A BETTER WAY TO CHANGE COLOUR **
                 ((TextView) adapterView.getChildAt(0)).setTextColor(getResources().getColor(R.color.colorLightText));
+
+                //if it is custom show textfield
+                if (adapterView.getItemAtPosition(i).equals(customString)) {
+                    unitText.setVisibility(View.VISIBLE);
+                } else {
+                    unitText.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -93,14 +107,19 @@ public class activity_add_ingredient extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //return data inserted
-                //check if all fields filled in
-                if (!(nameText.getText().toString().equals("") || amountText.getText().toString().equals("") || unitText.getText().toString().equals("")))
+                //check if all fields filled in properly
+                if ((!nameText.getText().toString().equals("") && !amountText.getText().toString().equals("")) && (unitText.getVisibility() == View.GONE || !unitText.getText().toString().equals("")))
                 {
                     Intent returnIntent = new Intent();
                     currentIngredient.setName(nameText.getText().toString());
                     currentIngredient.setAmount(Float.parseFloat(amountText.getText().toString()));
-                    // currentIngredient.setUnit(unitText.getText().toString());
+
+                    //let the custom thingy be the unit in case that is selected
+                    if (spinner.getSelectedItem().equals(customString)) {
+                        currentIngredient.setUnit(unitText.getText().toString());
+                    }
                     returnIntent.putExtra("Ingredient", currentIngredient);
+
                     //check if this was an edit
                     if (oldName != null) {
                         returnIntent.putExtra("oldName", oldName);
@@ -118,11 +137,13 @@ public class activity_add_ingredient extends AppCompatActivity {
     //sets the spinner value to the string if it is in the list
     public void setSpinnerSelection(Spinner spin, String str) {
         for (int i = 0; i < spin.getCount(); i++) {
-            if (spin.getItemAtPosition(i).equals(str)) {
+            if (spin.getItemAtPosition(i).toString().toLowerCase().equals(str.toLowerCase())) {
                 spin.setSelection(i);
                 return;
             }
         }
+        //if it is not in there: custom
+        spin.setSelection(spin.getCount() - 1);
     }
 
     public boolean onOptionsItemSelected(MenuItem item){

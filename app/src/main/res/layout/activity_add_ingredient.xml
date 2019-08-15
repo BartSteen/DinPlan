@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
         android:text="New Ingredient"
         android:textColor="@color/colorLightText"
@@ -43,39 +43,30 @@
         android:id="@+id/etxt_amount"
         android:layout_width="128dp"
         android:layout_height="50dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="128dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginStart="78dp"
+        android:layout_marginTop="64dp"
         android:ems="10"
         android:hint="Amount"
         android:inputType="number"
         android:textAlignment="center"
         android:textColor="@color/colorLightText"
         android:textColorHint="@color/colorPrimaryLight"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etxt_IngName"
-        app:layout_constraintVertical_bias="0.17000002" />
+        app:layout_constraintTop_toBottomOf="@+id/etxt_IngName" />
 
     <EditText
         android:id="@+id/etxt_unit"
-        android:layout_width="98dp"
+        android:layout_width="104dp"
         android:layout_height="49dp"
-        android:layout_marginStart="128dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="64dp"
         android:ems="10"
         android:hint="Unit"
         android:inputType="textPersonName"
         android:textAlignment="center"
         android:textColor="@color/colorLightText"
         android:textColorHint="@color/colorPrimaryLight"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etxt_IngName"
-        app:layout_constraintVertical_bias="0.17000002" />
+        app:layout_constraintTop_toBottomOf="@+id/etxt_IngName" />
 
     <Button
         android:id="@+id/btn_addIng"
@@ -93,13 +84,11 @@
 
     <Spinner
         android:id="@+id/spn_unit"
-        android:layout_width="154dp"
-        android:layout_height="43dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="32dp"
-        app:layout_constraintBottom_toTopOf="@+id/btn_addIng"
+        android:layout_width="wrap_content"
+        android:layout_height="49dp"
+        android:layout_marginTop="64dp"
+        android:layout_marginEnd="78dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/etxt_IngName" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
