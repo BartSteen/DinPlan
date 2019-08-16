@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -119,13 +121,7 @@ public class activity_weekly_calendar extends AppCompatActivity {
                 return true;
             case R.id.option_clear_selected:
                 //remove all the plans on selected days
-                for (int i = 0; i < selectedDaysList.size(); i++ ) {
-                    dataCont.removePlan(selectedDaysList.get(i));
-                }
-                dataCont.savePlan();
-
-                //reset
-                stopSelection();
+                confirmPopUp(selectedDaysList);
                 return true;
             case R.id.option_grocery_list:
                 //go to grocery list activity
@@ -138,6 +134,42 @@ public class activity_weekly_calendar extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    //shows confirmation pop up
+    private void confirmPopUp(final ArrayList<String> selectedDaysList) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("Clear Plans?");
+
+        //buttons
+        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                clearDays(selectedDaysList);
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //doNothing
+            }
+        });
+
+        //show pop up
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    //clear all plans in the arraylist
+    private void clearDays(ArrayList<String> selectedDaysList) {
+        for (int i = 0; i < selectedDaysList.size(); i++) {
+            dataCont.removePlan(selectedDaysList.get(i));
+        }
+        dataCont.savePlan();
+
+        //reset
+        stopSelection();
     }
 
     @Override

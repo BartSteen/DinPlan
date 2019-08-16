@@ -1,6 +1,8 @@
 package com.example.dinplan;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -127,11 +129,8 @@ public class activity_add_meal extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.option_delete:
-                //delete by adding "oldId" as an extra
-                Intent returnIntent = new Intent();
-                returnIntent.putExtra("oldId", currentMeal.getId());
-                setResult(Activity.RESULT_OK, returnIntent);
-                finish();
+                //show pop up
+                confirmPopUp();
                 return true;
             case R.id.option_add_recipe:
                 Intent myIntent = new Intent(getBaseContext(), activity_recipe.class);
@@ -143,6 +142,39 @@ public class activity_add_meal extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    //shows confirmation pop up
+    private void confirmPopUp() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("Delete Meal?");
+
+        //buttons
+        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                returnRemove();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //doNothing
+            }
+        });
+
+        //show pop up
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    //end activity and give orders ro remove current meal
+    private void returnRemove() {
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("oldId", currentMeal.getId());
+        setResult(Activity.RESULT_OK, returnIntent);
+        finish();
     }
 
     @Override

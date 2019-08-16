@@ -3,6 +3,8 @@ package com.example.dinplan;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -152,14 +154,43 @@ public class activity_add_ingredient extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.option_delete_ing:
-                //delete by passing oldName data in intent
-                Intent returnIntent = new Intent();
-                returnIntent.putExtra("oldName", oldName);
-                setResult(Activity.RESULT_OK, returnIntent);
-                finish();
+                //show confirmation pop up
+                confirmPopUp();
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    //shows confirmation pop up
+    private void confirmPopUp() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("Delete Ingredient?");
+
+        //buttons
+        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                returnRemove();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //doNothing
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    //end activity and give orders ro remove current ingredient
+    private void returnRemove() {
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("oldName", oldName);
+        setResult(Activity.RESULT_OK, returnIntent);
+        finish();
     }
 
     @Override
