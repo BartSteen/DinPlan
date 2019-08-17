@@ -2,6 +2,9 @@ package com.example.dinplan;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -55,7 +58,29 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed()
     {
         //Just do nothing for now
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("Quit?");
+
+        //buttons
+        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                MainActivity.super.onBackPressed();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //doNothing
+            }
+        });
+
+        //show pop up
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
+
 
     @Override
     public void onResume() {
