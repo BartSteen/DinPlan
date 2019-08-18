@@ -5,12 +5,16 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import java.lang.reflect.Array;
@@ -42,6 +46,16 @@ public class activity_grocery_list extends AppCompatActivity {
         ingredientList = getIngredientsFromMeals(mealList);
 
         initRecyclerView();
+
+        //button event for adding item
+        Button btnAddItem = findViewById(R.id.btn_add_grocery_item);
+        btnAddItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(getBaseContext(), activity_add_ingredient.class);
+                startActivityForResult(myIntent, 1);
+            }
+        });
 
     }
 
@@ -86,6 +100,72 @@ public class activity_grocery_list extends AppCompatActivity {
 
         return ingredientList;
     }
+
+    //removes an item with name nameStr from the arraylist
+    private void removeItemFromList(String nameStr) {
+        for (int i = 0; i < ingredientList.size(); i++) {
+            if (ingredientList.get(i).getName().toLowerCase().equals(nameStr.toLowerCase())) {
+                ingredientList.remove(i);
+                return;
+            }
+        }
+    }
+
+    //add an item to the list
+    public void addItemToList(Ingredient ing) {
+        for (int i = 0; i < ingredientList.size(); i++) {
+            if (ingredientList.get(i).getName().toLowerCase().equals(ing.getName().toLowerCase())) {
+                //ask what the user wants to do
+                boolean sameUnit = ingredientList.get(i).getUnit().toLowerCase().equals(ing.getUnit().toLowerCase());
+                confirmPopUp(sameUnit, i, ing);
+                return;
+            }
+        }
+        ingredientList.add(ing);
+    }
+
+    //shows merge/override pop up and deals with it
+    private void confirmPopUp(Boolean equalUnits, final int indexDup, final Ingredient ing) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("An item with this name already exists");
+
+        //buttons
+        builder.setPositiveButton("Replace", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //replace it in the list
+                ingredientList.set(indexDup, ing);
+
+                RecyclerView recyclerView = findViewById(R.id.recycler_grocery_list);
+                recyclerView.getAdapter().notifyDataSetChanged();
+            }
+        });
+        //if units are the same allow for merge
+        if (equalUnits) {
+            builder.setNeutralButton("Merge", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    //add up the two amounts
+                    ingredientList.get(indexDup).setAmount(ingredientList.get(indexDup).getAmount() + ing.getAmount());
+
+                    RecyclerView recyclerView = findViewById(R.id.recycler_grocery_list);
+                    recyclerView.getAdapter().notifyDataSetChanged();
+                }
+            });
+        }
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //doNothing
+            }
+        });
+
+        //show pop up
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
 
     private void initRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.recycler_grocery_list);
@@ -138,4 +218,32 @@ public class activity_grocery_list extends AppCompatActivity {
         return true;
     }
 
+    //triggers when an item is added
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 1) {
+            //if successful
+            if (resultCode == Activity.RESULT_OK) {
+                //check if this is a replacement
+                if (data.getExtras().containsKey("oldName")) {
+                    removeItemFromList((String) data.getExtras().get("oldName"));
+                }
+                //check if this is adding an ingredient (rather than delete)
+                if (data.getExtras().containsKey("Ingredient")) {
+                    Ingredient newIngredient = (Ingredient) data.getSerializableExtra("Ingredient");
+                    addItemToList(newIngredient);
+                }
+
+                RecyclerView recyclerView = findViewById(R.id.recycler_grocery_list);
+                recyclerView.getAdapter().notifyDataSetChanged();
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //Write your code if there's no result
+            }
+        }
+    }
+
 }
+
+
