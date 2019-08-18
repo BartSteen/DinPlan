@@ -7,14 +7,18 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
+    //for leaving on double press
+    boolean doubleBackToExitPressedOnce = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    //set the screen to go back to
+  /*  //set the screen to go back to
     @Override
     public void onBackPressed()
     {
@@ -79,6 +83,28 @@ public class MainActivity extends AppCompatActivity {
         //show pop up
         AlertDialog dialog = builder.create();
         dialog.show();
+    } */
+
+
+    @Override
+    public void onBackPressed() {
+        //if pressed twice back out of app
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+
+        //else give message and start delay
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Please click back again to exit", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce = false;
+            }
+        }, 2000);
     }
 
 
