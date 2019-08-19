@@ -148,7 +148,8 @@ public class activity_add_meal extends AppCompatActivity {
     private void confirmPopUp() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        builder.setTitle("Delete Meal?");
+        builder.setTitle("Delete Meal");
+        builder.setMessage("Are you sure you want to delete this meal?");
 
         //buttons
         builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
@@ -177,6 +178,36 @@ public class activity_add_meal extends AppCompatActivity {
         finish();
     }
 
+    //shows pop up when there is a duplicate, returns boolean for what is pressed
+    private void duplicatePopUp(final Ingredient ing) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("An ingredient with that name already exists");
+        builder.setMessage("Do you want to replace it or cancel?");
+
+
+        //buttons
+        builder.setPositiveButton("Replace", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //add the ingredient
+                currentMeal.addIngredient(ing);
+                RecyclerView recyclerView = findViewById(R.id.ingredientView);
+                recyclerView.getAdapter().notifyDataSetChanged();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //doNothing
+            }
+        });
+
+        //show pop up
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -198,7 +229,15 @@ public class activity_add_meal extends AppCompatActivity {
                 //check if this is adding an ingredient (rather than delete)
                 if (data.getExtras().containsKey("Ingredient")) {
                     Ingredient newIngredient = (Ingredient) data.getSerializableExtra("Ingredient");
-                    currentMeal.addIngredient(newIngredient);
+
+                    //action based on whether or not it is a duplicate
+                    if (currentMeal.ingInList(newIngredient)) {
+                        //let user choose what to do
+                        duplicatePopUp(newIngredient);
+                    } else {
+                        //just add it freely
+                        currentMeal.addIngredient(newIngredient);
+                    }
                 }
 
                 //if it contains a recipe add it to the meal

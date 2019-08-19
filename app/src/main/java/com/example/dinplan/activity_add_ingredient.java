@@ -165,7 +165,8 @@ public class activity_add_ingredient extends AppCompatActivity {
     private void confirmPopUp() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        builder.setTitle("Delete Ingredient?");
+        builder.setTitle("Delete Ingredient");
+        builder.setMessage("Are you sure you want to delete this ingredient?");
 
         //buttons
         builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {

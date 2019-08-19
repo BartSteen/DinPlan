@@ -64,6 +64,16 @@ public class Meal implements Serializable {
         ingredients.add(ing);
     }
 
+    //returns true if ing is already in the ingredients list
+    public Boolean ingInList(Ingredient ing) {
+        for (int i = 0; i < ingredients.size(); i++) {
+            if (ingredients.get(i).getName().toLowerCase().equals(ing.getName().toLowerCase())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     //remove the ingredient with name from the list
     public void removeIngredient(String name) {
         for (int i = 0; i < ingredients.size(); i++) {

@@ -129,6 +129,12 @@ public class activity_grocery_list extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setTitle("An item with this name already exists");
+        //message text based on options
+        if (equalUnits) {
+            builder.setMessage("Do you want to replace it, combine them or cancel?");
+        } else {
+            builder.setMessage("Do you want to replace it or cancel?");
+        }
 
         //buttons
         builder.setPositiveButton("Replace", new DialogInterface.OnClickListener() {
@@ -143,7 +149,7 @@ public class activity_grocery_list extends AppCompatActivity {
         });
         //if units are the same allow for merge
         if (equalUnits) {
-            builder.setNeutralButton("Merge", new DialogInterface.OnClickListener() {
+            builder.setNeutralButton("Combine", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     //add up the two amounts
