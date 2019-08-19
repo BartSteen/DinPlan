@@ -81,7 +81,7 @@ public class activity_add_meal extends AppCompatActivity {
             public void onClick(View view) {
                 //check if it has a name
                 if (!mealNameEtxt.getText().toString().equals("")) {
-                    currentMeal.setName(mealNameEtxt.getText().toString());
+                    currentMeal.setName(mealNameEtxt.getText().toString().trim());
 
                     //add empty recipe if there is none yet
                     if (currentMeal.getRecipe() == null) {

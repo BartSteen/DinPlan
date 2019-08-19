@@ -113,7 +113,7 @@ public class activity_add_ingredient extends AppCompatActivity {
                 if ((!nameText.getText().toString().equals("") && !amountText.getText().toString().equals("")) && (unitText.getVisibility() == View.GONE || !unitText.getText().toString().equals("")))
                 {
                     Intent returnIntent = new Intent();
-                    currentIngredient.setName(nameText.getText().toString());
+                    currentIngredient.setName(nameText.getText().toString().trim());
                     currentIngredient.setAmount(Float.parseFloat(amountText.getText().toString()));
 
                     //let the custom thingy be the unit in case that is selected
