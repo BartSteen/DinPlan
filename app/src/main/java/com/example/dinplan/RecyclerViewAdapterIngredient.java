@@ -40,7 +40,11 @@ public class RecyclerViewAdapterIngredient extends RecyclerView.Adapter<Recycler
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final Ingredient currentIng = mIngredients.get(position);
         holder.name.setText(currentIng.getName());
-        holder.amount.setText(Float.toString(currentIng.getAmount()));
+        if (currentIng.getAmount() != 0) {
+            holder.amount.setText(Float.toString(currentIng.getAmount()));
+        } else {
+            holder.amount.setText("");
+        }
         holder.unit.setText(currentIng.getUnit());
 
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {

@@ -98,7 +98,7 @@ public class DataController {
                 //loop over all ingredients
                 for (String ingString : ingredientsSeparate) {
                     //within each ingredient the variables are separated by ;
-                    String[] sepComponents = ingString.split(";");
+                    String[] sepComponents = ingString.split(";", -1);
                     if (sepComponents.length == 3) {
                         String ingName = sepComponents[0];
                         Float ingAmount = Float.valueOf(sepComponents[1]);
@@ -110,7 +110,6 @@ public class DataController {
 
                 //load recipe
                 String recipeString = scn.nextLine();
-                System.out.println("recipe: " + recipeString);
                 String[] timeStepSplit = recipeString.split("\\|", -1);
 
                 //get preperation time

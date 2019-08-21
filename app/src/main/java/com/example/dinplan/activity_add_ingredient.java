@@ -53,7 +53,9 @@ public class activity_add_ingredient extends AppCompatActivity {
         if (getIntent().getExtras() != null) {
             currentIngredient = (Ingredient) getIntent().getExtras().get("Ingredient");
             nameText.setText(currentIngredient.getName());
-            amountText.setText(Float.toString(currentIngredient.getAmount()));
+            if (currentIngredient.getAmount() != 0) {
+                amountText.setText(Float.toString(currentIngredient.getAmount()));
+            }
             oldName = currentIngredient.getName();
             setSpinnerSelection(spinner, currentIngredient.getUnit());
 
@@ -110,16 +112,24 @@ public class activity_add_ingredient extends AppCompatActivity {
             public void onClick(View view) {
                 //return data inserted
                 //check if all fields filled in properly
-                if ((!nameText.getText().toString().equals("") && !amountText.getText().toString().equals("")) && (unitText.getVisibility() == View.GONE || !unitText.getText().toString().equals("")))
+                if ((!nameText.getText().toString().equals("") /*&& !amountText.getText().toString().equals("")) && (unitText.getVisibility() == View.GONE || !unitText.getText().toString().equals(""))*/))
                 {
+
                     Intent returnIntent = new Intent();
                     currentIngredient.setName(nameText.getText().toString().trim());
-                    currentIngredient.setAmount(Float.parseFloat(amountText.getText().toString()));
-
-                    //let the custom thingy be the unit in case that is selected
-                    if (spinner.getSelectedItem().equals(customString)) {
-                        currentIngredient.setUnit(unitText.getText().toString());
+                    //if amount is filled in use that else use 0 and no unit
+                    if (!amountText.getText().toString().equals("")) {
+                        currentIngredient.setAmount(Float.parseFloat(amountText.getText().toString()));
+                        //let the custom thingy be the unit in case that is selected
+                        if (spinner.getSelectedItem().equals(customString)) {
+                            currentIngredient.setUnit(unitText.getText().toString());
+                        }
+                    } else {
+                        currentIngredient.setAmount(0);
+                        currentIngredient.setUnit("");
                     }
+
+
                     returnIntent.putExtra("Ingredient", currentIngredient);
 
                     //check if this was an edit
