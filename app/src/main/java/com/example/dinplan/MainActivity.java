@@ -57,34 +57,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-  /*  //set the screen to go back to
-    @Override
-    public void onBackPressed()
-    {
-        //Just do nothing for now
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        builder.setTitle("Quit?");
-
-        //buttons
-        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                MainActivity.super.onBackPressed();
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                //doNothing
-            }
-        });
-
-        //show pop up
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    } */
-
 
     @Override
     public void onBackPressed() {
@@ -96,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
         //else give message and start delay
         this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "Please click back again to exit", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Click back again to leave", Toast.LENGTH_SHORT).show();
 
         new Handler().postDelayed(new Runnable() {
 

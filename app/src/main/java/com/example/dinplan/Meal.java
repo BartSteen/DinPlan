@@ -49,10 +49,6 @@ public class Meal implements Serializable {
         return ingredients;
     }
 
-    public void setIngredients(ArrayList<Ingredient> ingredients) {
-        this.ingredients = ingredients;
-    }
-
     //add an ingredient to the list for the view if the name is available
     public void addIngredient(Ingredient ing) {
         for (int i = 0; i < ingredients.size(); i++) {

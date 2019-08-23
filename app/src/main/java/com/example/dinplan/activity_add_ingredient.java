@@ -35,7 +35,6 @@ public class activity_add_ingredient extends AppCompatActivity {
         final EditText nameText = findViewById(R.id.etxt_IngName);
         final EditText amountText = findViewById(R.id.etxt_amount);
         final EditText unitText = findViewById(R.id.etxt_unit);
-        // Button btnDel = findViewById(R.id.btn_delIng);
         TextView upperTxt = findViewById(R.id.txt_ing_main);
 
         //spinner stuff
@@ -68,16 +67,6 @@ public class activity_add_ingredient extends AppCompatActivity {
 
             upperTxt.setText("Edit ingredient");
 
-        /*    btnDel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //delete by passing oldName data in intent
-                    Intent returnIntent = new Intent();
-                    returnIntent.putExtra("oldName", oldName);
-                    setResult(Activity.RESULT_OK, returnIntent);
-                    finish();
-                }
-            }); */
         } else {
             currentIngredient = new Ingredient();
             //  btnDel.setVisibility(View.GONE);
@@ -89,7 +78,6 @@ public class activity_add_ingredient extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 currentIngredient.setUnit((String) adapterView.getItemAtPosition(i));
-                //FIND A BETTER WAY TO CHANGE COLOUR **
                 ((TextView) adapterView.getChildAt(0)).setTextColor(getResources().getColor(R.color.colorLightText));
 
                 //if it is custom show textfield
@@ -114,31 +102,36 @@ public class activity_add_ingredient extends AppCompatActivity {
                 //check if all fields filled in properly
                 if ((!nameText.getText().toString().equals("") /*&& !amountText.getText().toString().equals("")) && (unitText.getVisibility() == View.GONE || !unitText.getText().toString().equals(""))*/))
                 {
-
-                    Intent returnIntent = new Intent();
-                    currentIngredient.setName(nameText.getText().toString().trim());
-                    //if amount is filled in use that else use 0 and no unit
-                    if (!amountText.getText().toString().equals("")) {
-                        currentIngredient.setAmount(Float.parseFloat(amountText.getText().toString()));
-                        //let the custom thingy be the unit in case that is selected
-                        if (spinner.getSelectedItem().equals(customString)) {
-                            currentIngredient.setUnit(unitText.getText().toString());
-                        }
+                    //check for illegal characters
+                    if (nameText.getText().toString().contains(";") || nameText.getText().toString().contains("\\|") || unitText.getText().toString().contains(";") || unitText.getText().toString().contains("\\|")) {
+                        Toast.makeText(getBaseContext(), "Illegal character entered (; or |)", Toast.LENGTH_SHORT).show();
                     } else {
-                        currentIngredient.setAmount(0);
-                        currentIngredient.setUnit("");
+
+                        Intent returnIntent = new Intent();
+                        currentIngredient.setName(nameText.getText().toString().trim());
+                        //if amount is filled in use that else use 0 and no unit
+                        if (!amountText.getText().toString().equals("")) {
+                            currentIngredient.setAmount(Float.parseFloat(amountText.getText().toString()));
+                            //let the custom thingy be the unit in case that is selected
+                            if (spinner.getSelectedItem().equals(customString)) {
+                                currentIngredient.setUnit(unitText.getText().toString());
+                            }
+                        } else {
+                            currentIngredient.setAmount(0);
+                            currentIngredient.setUnit("");
+                        }
+
+
+                        returnIntent.putExtra("Ingredient", currentIngredient);
+
+                        //check if this was an edit
+                        if (oldName != null) {
+                            returnIntent.putExtra("oldName", oldName);
+                        }
+
+                        setResult(Activity.RESULT_OK, returnIntent);
+                        finish();
                     }
-
-
-                    returnIntent.putExtra("Ingredient", currentIngredient);
-
-                    //check if this was an edit
-                    if (oldName != null) {
-                        returnIntent.putExtra("oldName", oldName);
-                    }
-
-                    setResult(Activity.RESULT_OK, returnIntent);
-                    finish();
                 } else {
                     Toast.makeText(getBaseContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show();
                 }

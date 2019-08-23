@@ -45,17 +45,7 @@ public class activity_add_meal extends AppCompatActivity {
             edit = true;
             upperTxt.setText("Edit Meal");
 
-           /* //set action for delete button
-            btnDelMeal.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //delete by adding "oldId" as an extra
-                    Intent returnIntent = new Intent();
-                    returnIntent.putExtra("oldId", currentMeal.getId());
-                    setResult(Activity.RESULT_OK, returnIntent);
-                    finish();
-                }
-            }); */
+
         } else {
             currentMeal = new Meal();
             //get rid of delete button
@@ -246,6 +236,7 @@ public class activity_add_meal extends AppCompatActivity {
                     currentMeal.setRecipe(tempRec);
                 }
 
+                //update the list
                 RecyclerView recyclerView = findViewById(R.id.ingredientView);
                 recyclerView.getAdapter().notifyDataSetChanged();
             }

@@ -143,6 +143,7 @@ public class activity_grocery_list extends AppCompatActivity {
                 //replace it in the list
                 ingredientList.set(indexDup, ing);
 
+                //update list
                 RecyclerView recyclerView = findViewById(R.id.recycler_grocery_list);
                 recyclerView.getAdapter().notifyDataSetChanged();
             }
