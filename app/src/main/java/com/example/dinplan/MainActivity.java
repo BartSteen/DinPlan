@@ -23,6 +23,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setLogo(R.drawable.ic_action_name);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+        getSupportActionBar().setTitle("");
+
         setContentView(R.layout.activity_main);
 
         //button for going directly to the meal list
@@ -90,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
         Integer dayOfMonth = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
         Integer monthNumber = Calendar.getInstance().get(Calendar.MONTH) + 1;
         Integer yearNumber = Calendar.getInstance().get(Calendar.YEAR);
-        String dateString = String.format("%d-%d-%d",dayOfMonth, monthNumber, yearNumber);
+        String dateString = String.format("%d-%d-%d", dayOfMonth, monthNumber, yearNumber);
 
         //load data
         DataController dataCont = new DataController(getBaseContext());
